@@ -10,9 +10,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Diego Mazzotti" />
 
 
-<title>README.utf8.md</title>
+<title>Dicas para a Hackathon</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -299,14 +300,43 @@ $(document).ready(function () {
 
 
 
+<h1 class="title toc-ignore">Dicas para a Hackathon</h1>
+<h4 class="author">Diego Mazzotti</h4>
+<h4 class="date">16/12/2019</h4>
 
 </div>
 
 
-<div id="rmarkdown-website-tutorial" class="section level1">
-<h1>rmarkdown-website-tutorial</h1>
-<p><a href="https://jules32.github.io/rmarkdown-website-tutorial/">A tutorial for creating websites using R Markdown</a>.</p>
-<p>To build the website, run <a href="http://rmarkdown.rstudio.com/rmarkdown_websites.html"><code>rmarkdown::render_site()</code></a>, which knits each Rmarkdown (*.Rmd) based on parameters in <code>_site.yml</code> before pushing the files back to Github.</p>
+<div id="abaixo-seguem-alguns-comandos-uteis-para-o-pre-processamento-de-dados-para-a-hackathon" class="section level3">
+<h3>Abaixo seguem alguns comandos úteis para o pré-processamento de dados para a Hackathon</h3>
+<pre class="r"><code># Copiar os dados da Hackathon para o diretório de trabalho (R)
+file.copy(from = &quot;/data/Dados_curso/&quot;, to = &quot;.&quot;, recursive = T)</code></pre>
+</div>
+<div id="e-possivel-acessar-o-terminal-linux-ao-clinar-na-aba-terminal-proximo-ao-console-do-rstudio." class="section level3">
+<h3>É possível acessar o terminal Linux ao clinar na aba “Terminal”, próximo ao console do RStudio.</h3>
+</div>
+<div id="genotipagem" class="section level3">
+<h3>Genotipagem</h3>
+<pre class="bash"><code># Alguns comandos úteis para facilitar o processamento de dados de genotipagem (devem ser rodados na aba Terminal)
+
+# O comando abaixo recodifica todos os SNPs para o formato aditivo (número cópias de cada alelo: 0, 1 ou 2)
+plink --bfile BRFEP --recode A --out BRFED_additive
+
+#Caso tenha interesse em filtrar para uma liste pré-selecionada the SNPs, criar esta lista (um SNP por linha), salvar como SNPs.txt e rodar:
+plink --bfile BRFEP --recode A --extract SNPs.txt --out BRFEP_additive_SNPs
+</code></pre>
+<pre class="r"><code># É possível agora importar o arquivo &quot;BRFED_additive.raw&quot; no R, no mesmo formato que foi importado anteriormente nos tutoriais (rodar estes no R):
+# Atenção, evite carregar TODOS os SNPs (ocupa muita memóeria). O ídeal é rodar este comando apenas para SNPs filtrados:
+
+dados_SNPs &lt;- read.table(&quot;BRFEP_additive_SNPs.raw&quot;, header = T)</code></pre>
+</div>
+<div id="expressao" class="section level3">
+<h3>Expressão</h3>
+<pre class="r"><code># Para carregar os dados de expressão, você pode usar o seguinte comando (no R):
+data &lt;- read.table(&quot;FEP_Expressao_Clean.txt&quot;, header=T, sep=&quot;\t&quot;)
+
+# Será necessário transpor os dados (genes nas colunas, e indivíduos nas linhas). Use o comando abaixo para manter os nomes corretos das linhas e colunas:
+data_t = setNames(data.frame(t(data[,-1])), data[,1])</code></pre>
 </div>
 
 <p>Copyright &copy; 2019 Diego R. Mazzotti, Ph.D. Todos os direitos reservados.</p>

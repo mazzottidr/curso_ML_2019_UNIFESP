@@ -1,19 +1,21 @@
-name: "R Markdown Websites Tutorial"
+name: "Curso Machine Learning UNIFESP 2019"
 navbar:
-  title: "HOME"
+  title: "Curso ML 2019"
   left:
-    - text: "First Observations"
-      href: first_observations.html
-    - text: "Basic Workflow"
-      href: basic_workflow.html
-    - text: "Getting Sophisticated"
-      href: getting_sophisticated.html
-    - text: "Your Turn"
-      href: your_turn.html
+    - text: "Home"
+      href: index.html
+    - text: "Acesso ao EC2"
+      href: aws_access.html
+    - text: "Modelos supervisionados"
+      href: ml_supervisionado.html
+    - text: "Modelos não-supervisionados"
+      href: ml_naosupervisionado.html
+    - text: "Dicas para Hackathon"
+      href: hackathon.html
 output_dir: "."
 output:
   html_document:
     theme: yeti
     highlight: textmate
-#    include:
-#      after_body: _footer.html
+    include:
+      after_body: footer.html
