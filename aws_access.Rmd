@@ -32,7 +32,7 @@ A instância pré-configurada utilizada por este curso está disponível no link
 
 Você deve usar o nome de usuário e senha fornecidos para fazer o login. Após autenticação, você será apresentado à janela principal do RStudio:
 
-![](../images/screenshot_Rstudio.PNG)
+![](images/screenshot_Rstudio.PNG)
 
 
 Esta será a interface em que realizará a maioria das atividades relacionadas a este curso.

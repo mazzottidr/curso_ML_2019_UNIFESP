@@ -13,7 +13,7 @@
 <meta name="author" content="Diego Mazzotti" />
 
 
-<title>ml_supervisionado.utf8.md</title>
+<title>Modelos de classificação supervisionada</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -405,28 +405,28 @@ class.task.teste.todos = makeClassifTask(data = select(dados_ML_supervisionado_T
 <ul>
 <li><p><strong>Acurácia</strong> (<em>accuracy</em>): Número de classificações corretas sobre o total de classificações.</p>
 <center>
-<p><img src="../images/accuracy.png" /></p>
+<p><img src="images/accuracy.png" /></p>
 </center></li>
 <li><p><strong>Acurácia balanceada</strong> (<em>balanced accuracy</em>): Média do número de classificações corretas sobre o total de classificações para cada categoria separadamente. Essa medida é preferível quando as classes do desfecho não são balanceadas (ex: número de controles é muito maior que o de casos).</p></li>
 <li><p><strong>Precisão ou valor preditivo positivo</strong> (<em>Precision</em>): Número de positivos verdadeiros sobre o total de positivos.</p>
 <center>
-<p><img src="../images/precision.png" /></p>
+<p><img src="images/precision.png" /></p>
 </center></li>
 <li><p><strong>Revocação / Sensibilidade</strong> (<em>Recall ou Sensitivity</em>): Número de positivos verdadeiros sobre o total de verdadeiros. Também chamada de taxa de positivos verdadeiros.</p>
 <center>
-<p><img src="../images/recall.png" /></p>
+<p><img src="images/recall.png" /></p>
 </center></li>
 <li><p><strong>Especificidade</strong> (<em>Specificity</em>): Número de negativos verdadeiros sobre o total de negativos. Também chamada de taxa de negativos verdadeiros.</p>
 <center>
-<p><img src="../images/specificity.png" /></p>
+<p><img src="images/specificity.png" /></p>
 </center></li>
 <li><p><strong>Escore F1</strong> (<em>F1-score</em>): Média harmônica entre precisão e recall. Valores próximos de 1 indicam que o modelo de classificação é bom.</p>
 <center>
-<p><img src="../images/f1.png" /></p>
+<p><img src="images/f1.png" /></p>
 </center></li>
 <li><p><strong>Área sob a curva ROC</strong> (<em>Area under receiver operating characteristic curve</em>): Área sob a curva da relação entre <code>1-especificidade</code> e <code>sensibilidade</code>. Valores próximos de 1 indicam que o modelo de classificação é bom.</p>
 <center>
-<p><img src="../images/auc.png" /></p>
+<p><img src="images/auc.png" /></p>
 </center></li>
 </ul>
 <p>Vamos definir no R todas as medidas de avaliação de desempenho, para que possamos usar nos métodos de aprendizagem deste tutorial.</p>
@@ -553,7 +553,7 @@ plotROCCurves(roc_curve.pred.modelo.SVM.todos.teste)</code></pre>
 <p>No entanto é uma ótima oportunidade para explorar dois conceitos relevantes em aprendizagem de máquina: <strong>estratégias de amostragem</strong> e <strong>ajuste de hiperparâmetros</strong>.</p>
 <p>Uma das maneiras de diminuir o efeito do sobreajuste é treinar os modelos em diferentes “partes” dos dados de treino, e testar na parte restante. O pacote <code>mlr</code> permite realizar estes experimentos de amostragem de maneira descomplicada. É importante ressaltar que durante a amostragem, os dados de treino são subdivididos em “treino e teste”. Este “teste” é diferente dos dados de teste que definimos no começo, pois é uma subamostra dos dados de treino. Isso permite que os modelos não sofram efeitos de sobreajuste, pois observam diferentes combinações de dados de treino. Uma das estratégias de amostragem mais comuns é chamada de <strong><em>cross-validation</em></strong>. Veja a figura abaixo.</p>
 <center>
-<img src="../images/TR_TE.png" />
+<img src="images/TR_TE.png" />
 </center>
 <p>A figura representa um exemplo de definição de treino e teste ideal em experimentos de aprendizagem de máquina, seguido de <strong>4-fold cross-validation</strong>. Neste exemplo, 80% dos dados são utilizados para treino, e 20% para teste (azul escuro e laranja escuro, respectivamente). Os 20% de dados em laranja escuro nunca serão usados para treinar modelos, apenas para avaliar desempenho dos modelos criados a partir dos dados de treino (como o que definimos nos modelos anteriores). O restante (80% azul escuro) seão usados para treino, mas em cada etapa de treino é preciso avaliar o desempenho dos modelos usando dados que não foram vistos. Esta etapa é chamada de <em>cross-validation</em>. Os dados de treino são subdivididos novamente em 4 partes, e 75% dos dados de treino são usados para treino efetivo, e 25% para teste. Em seguida, outros 75% são utilizados para treino efetivo, e os 25% restantes para teste. No fim de todas as iterações, os modelos foram ajustados em 4 diferentes configurações, e por este motivo, é chamado de <em>4-fold cross-validation</em>. Existem outras estratégias de amostragem que podem ser consideradas (veja aqui: <a href="https://mlr.mlr-org.com/articles/tutorial/resample.html" class="uri">https://mlr.mlr-org.com/articles/tutorial/resample.html</a>), mas não serão abordadas neste curso.</p>
 <p>Além de usar estratégias de amostragem, podemos também fazer o ajuste de hiperparâmetros do método SVM. Hiperparêmtros são números que precisam ser definidos para melhor ajustar modelos de aprendizagem de máquina. Alguns métodos não requerem ajuste de parâmetros, mas outros, como SVM, requerem, pois existem muitas soluções para o problema de minimização do erro de classificação. E dependendo de onde o algorítmo inicia a busca, soluções muito diferentes podem ser encontradas. O pacote <code>mlr</code> facilita a criação de “campos de busca de hiperparâmetros”. Não entraremos em detalhes matemáticos nos conceitos de hiperparámetros de SVM, mas há 2 principais hiperparâmetros:</p>
