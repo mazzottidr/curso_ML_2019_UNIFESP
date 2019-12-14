@@ -1,5 +1,5 @@
 ---
-title: "Modelos de classificaÁ„o supervisionada"
+title: "Modelos de classifica√ß√£o supervisionada"
 author: "Diego Mazzotti"
 date: "16/12/2019"
 output: html_document
@@ -9,72 +9,72 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-### IntroduÁ„o
+### Introdu√ß√£o
 
-Neste tutorial, vamos explorar alguns modelos de aprendizagem de m·quina utilizados para realizar tarefas de **classificaÁ„o supervisionada**. Modelos supervisionados s„o utilizados quando temos dados disponÌveis de um desfecho categÛrico em que temos certeza que est· correto, e treinamos modelos utilizando estes dados; por isso o nome supervisionado. Uma vez que os modelos foram "treinados" nestes dados corretos, eles s„o em seguida availados em dados novos, que n„o foram utilizados para o treino dos modelos. Em outras palavras, para modelos de classificaÁ„o supervisionada, precisamos de duas fontes de dados: **treino** (para construir e treinar os modelos) e **teste** (para avaliar se o modelo criado no teste pode ser generalizado em dados que nunca observou).
+Neste tutorial, vamos explorar alguns modelos de aprendizagem de m√°quina utilizados para realizar tarefas de **classifica√ß√£o supervisionada**. Modelos supervisionados s√£o utilizados quando temos dados dispon√≠veis de um desfecho categ√≥rico em que temos certeza que est√° correto, e treinamos modelos utilizando estes dados; por isso o nome supervisionado. Uma vez que os modelos foram "treinados" nestes dados corretos, eles s√£o em seguida availados em dados novos, que n√£o foram utilizados para o treino dos modelos. Em outras palavras, para modelos de classifica√ß√£o supervisionada, precisamos de duas fontes de dados: **treino** (para construir e treinar os modelos) e **teste** (para avaliar se o modelo criado no teste pode ser generalizado em dados que nunca observou).
 
-Em resumo, em modelos de classificaÁ„o supervisionada, precisamos de:  
+Em resumo, em modelos de classifica√ß√£o supervisionada, precisamos de:  
 
-- Um **desfecho categÛrico** (ex: Caso/Controle, Leve/Moderado/Grave)
-- **Preditores**, ou vari·veis independentes, que ser„o utilizados para criar e treinar os modelos de classificaÁ„o
+- Um **desfecho categ√≥rico** (ex: Caso/Controle, Leve/Moderado/Grave)
+- **Preditores**, ou vari√°veis independentes, que ser√£o utilizados para criar e treinar os modelos de classifica√ß√£o
 - Dados para serem usados para o **treino** do modelo (incluem tanto preditores quanto desfecho)
 - Dados para serem usados para o **teste** (incluem apenas preditores)
-- Desfecho dos dados de teste, para avaliaÁ„o do **desempenho** do modelo
+- Desfecho dos dados de teste, para avalia√ß√£o do **desempenho** do modelo
 
-Muitas vezes, n„o h· uma distinÁ„o clara entre os dados usados para treino e teste - o banco de dados È ˙nico. Nestas situaÁıes, ser· necess·rio separar artificialmente o banco de dados entre treino e teste, de maneira representativa e proporcional. Neste tutorial vamos explorar alguns destes conceitos.
+Muitas vezes, n√£o h√° uma distin√ß√£o clara entre os dados usados para treino e teste - o banco de dados √© √∫nico. Nestas situa√ß√µes, ser√° necess√°rio separar artificialmente o banco de dados entre treino e teste, de maneira representativa e proporcional. Neste tutorial vamos explorar alguns destes conceitos.
 
-Ao desenvolver um desenho de classificaÁ„o supervisionada, nosso objetivo È tentar predizer com a maior precis„o possÌvel um desfecho categÛrico utilizando dados dos preditores em uma sess„o de treino, e em seguida avaliar o desempenho deste modelo numa sess„o de teste. Um modelo bem sucedido apresenta alto desempenho, e esse desempenho È similar entre treino e teste.
+Ao desenvolver um desenho de classifica√ß√£o supervisionada, nosso objetivo √© tentar predizer com a maior precis√£o poss√≠vel um desfecho categ√≥rico utilizando dados dos preditores em uma sess√£o de treino, e em seguida avaliar o desempenho deste modelo numa sess√£o de teste. Um modelo bem sucedido apresenta alto desempenho, e esse desempenho √© similar entre treino e teste.
 
-Neste tutorial vamos explorar alguns modelos supervisionados para tentar predizer **Status** dos indivÌduos (Caso/Controle) utilizando um total de **20 *Single Nucleotide Polymorphisms* (SNPs)**. Os dados que vamos utilizar s„o simulados, e representam 1600 indivÌduos (800 casos e 800 controles). Os diferentes modelos que vamos avaliar s„o:
+Neste tutorial vamos explorar alguns modelos supervisionados para tentar predizer **Status** dos indiv√≠duos (Caso/Controle) utilizando um total de **20 *Single Nucleotide Polymorphisms* (SNPs)**. Os dados que vamos utilizar s√£o simulados, e representam 1600 indiv√≠duos (800 casos e 800 controles). Os diferentes modelos que vamos avaliar s√£o:
 
-- **Regress„o logÌstica** (RL)
+- **Regress√£o log√≠stica** (RL)
 - **Support Vector Machines** (SVM)
 - **K Nearest Neighbors** (KNN)
 - **Random Forests** (RF)
 
-### Acesso e preparaÁ„o dos dados
+### Acesso e prepara√ß√£o dos dados
 
-NÛs iremos utilizar os mesmos dados que fizemos o download no tutorial de acesso ‡ inst‚ncia EC2 da Amazon.
+N√≥s iremos utilizar os mesmos dados que fizemos o download no tutorial de acesso √† inst√¢ncia EC2 da Amazon.
 
-1. Crie um novo diretÛrio chamado `ML_supervisionado`, onde todas as an·lises, dados e resultados referentes a este turorial ser„o organizados.
-2. Altere o diretÛrio de trabalho para este novo diretÛrio.
-3. FaÁa o download dos dados ([GAMETES_E3W_20atts_0.2H_EDM-1_1_clean.tsv](https://www.dropbox.com/s/5gazzk8z3qf93st/GAMETES_E3W_20atts_0.2H_EDM-1_1_clean.tsv?dl=1)) e em seguida o upload para o diretÛrio `ML_supervisionado`.
-4. Crie um novo script chamado `ML_supervisionado.R`, para colocar os comandos que ser„o rodados neste tutorial. A sugest„o È que no fim do tutorial, vocÍ tenha todos os comandos salvos no arquivo `ML_supervisionado.R`.
-5. Carrege os pacotes necess·rios para este tutorial:
+1. Crie um novo diret√≥rio chamado `ML_supervisionado`, onde todas as an√°lises, dados e resultados referentes a este turorial ser√£o organizados.
+2. Altere o diret√≥rio de trabalho para este novo diret√≥rio.
+3. Fa√ßa o download dos dados ([GAMETES_E3W_20atts_0.2H_EDM-1_1_clean.tsv](https://www.dropbox.com/s/5gazzk8z3qf93st/GAMETES_E3W_20atts_0.2H_EDM-1_1_clean.tsv?dl=1)) e em seguida o upload para o diret√≥rio `ML_supervisionado`.
+4. Crie um novo script chamado `ML_supervisionado.R`, para colocar os comandos que ser√£o rodados neste tutorial. A sugest√£o √© que no fim do tutorial, voc√™ tenha todos os comandos salvos no arquivo `ML_supervisionado.R`.
+5. Carrege os pacotes necess√°rios para este tutorial:
 ```{r, eval=F, echo=T}
 library(dplyr)
 library(mlr)
 
 ```
 
-6. Importe os dados para o R, observe as primeiras linhas, para garantir que tudo est· correto.
+6. Importe os dados para o R, observe as primeiras linhas, para garantir que tudo est√° correto.
 ```{r, eval=F, echo=T}
-# Importar os dados, definir vari·veis como fatores (categÛricas) e observar primeiras linhas
+# Importar os dados, definir vari√°veis como fatores (categ√≥ricas) e observar primeiras linhas
 dados_ML_supervisionado <- read.table("GAMETES_E3W_20atts_0.2H_EDM-1_1_clean.tsv", header = T, colClasses = "factor")
 head(dados_ML_supervisionado)
 ```
 
-Note que todas as vari·veis est„o presentes, inclusive a vari·vel `id` (que representa a identificaÁ„o dos indivÌduos). Uma observaÁ„o importante È que ao aplicar os modelos que ser„o discutidos, precisamos tomar cuidado para n„o incluir vari·veis que n„o devem fazer parte do modelo, como `id`, neste caso. Para isso, vamos usar algumas funÁıes de manipulaÁ„o de dados do pacote `dplyr` para facilitar a seleÁ„o/exclus„o de vari·veis ou indivÌduos que n„o estamos interessados.
+Note que todas as vari√°veis est√£o presentes, inclusive a vari√°vel `id` (que representa a identifica√ß√£o dos indiv√≠duos). Uma observa√ß√£o importante √© que ao aplicar os modelos que ser√£o discutidos, precisamos tomar cuidado para n√£o incluir vari√°veis que n√£o devem fazer parte do modelo, como `id`, neste caso. Para isso, vamos usar algumas fun√ß√µes de manipula√ß√£o de dados do pacote `dplyr` para facilitar a sele√ß√£o/exclus√£o de vari√°veis ou indiv√≠duos que n√£o estamos interessados.
 ```{r, eval=F, echo=T}
-# Esta funÁ„o permite chamar os dados sem a coluna "id". Isso facilitar· a exclus„o da coluna referente ‡ identificaÁ„o dos indivÌduos
+# Esta fun√ß√£o permite chamar os dados sem a coluna "id". Isso facilitar√° a exclus√£o da coluna referente √† identifica√ß√£o dos indiv√≠duos
 select(dados_ML_supervisionado, -id)
 
-# Esta funÁ„o permite chamar os dados apenas para as vari·veis Status e rs107596. Isso facilitar· a inclus„o apenas das vari·veis de interesse para o modelo.
+# Esta fun√ß√£o permite chamar os dados apenas para as vari√°veis Status e rs107596. Isso facilitar√° a inclus√£o apenas das vari√°veis de interesse para o modelo.
 select(dados_ML_supervisionado, Status, rs107596)
 
-# Esta funÁ„o permite chamar os dados de todas as vari·veis, mas apenas para os indivÌduos com genÛtipo "0" para o SNP rs107596.
+# Esta fun√ß√£o permite chamar os dados de todas as vari√°veis, mas apenas para os indiv√≠duos com gen√≥tipo "0" para o SNP rs107596.
 filter(dados_ML_supervisionado, rs107596==0)
 
-# Este conjunto de funÁıes permite selecionar os dados apenas para as vari·veis Status e rs107596, mas apenas para os indivÌduos com genÛtipo "2" para o SNP rs190962. Neste caso, È mais conveniente salvar o resultado destas operaÁıes em um objeto separado
+# Este conjunto de fun√ß√µes permite selecionar os dados apenas para as vari√°veis Status e rs107596, mas apenas para os indiv√≠duos com gen√≥tipo "2" para o SNP rs190962. Neste caso, √© mais conveniente salvar o resultado destas opera√ß√µes em um objeto separado
 dados_ML_supervisionado_filtrado <- dados_ML_supervisionado %>% filter(rs190962==2) %>% select(Status,rs107596)
-head(dados_ML_supervisionado_filtrado) # Confirme que apenas Status e rs107596 est„o presentes
-dim(dados_ML_supervisionado_filtrado) # Confirme que este novo objeto apresenta apenas 369 linhas (indivÌduos) e duas colunas (vari·veis), representando apenas indivÌduos com genÛtipo "2" para o SNP rs190962
+head(dados_ML_supervisionado_filtrado) # Confirme que apenas Status e rs107596 est√£o presentes
+dim(dados_ML_supervisionado_filtrado) # Confirme que este novo objeto apresenta apenas 369 linhas (indiv√≠duos) e duas colunas (vari√°veis), representando apenas indiv√≠duos com gen√≥tipo "2" para o SNP rs190962
 
 ```
 
 ### Definindo dados para treino e teste
 
-Como discutido anteriormente, qualquer modelo de aprendizagem de m·quina supervisionado precisa de dados de treino e de teste. Se o seu estudo apresenta um tamanho amostral consider·vel e vocÍ acredita que seja representativo da populaÁ„o que pretende estudar, a melhor maneira È definir uma porcentagem dos seus dados que nunca ser· usada na modelagem. Esta parte dos dados È chamada de **dados de teste**. No inÌcio da an·lise, vocÍ precisa fazer uma amostragem aleatÛria de todos os dados para separar estes indivÌduos em um objeto do R que ser· usado posteriormente para avaliar o desempenho dos modelos criados. O resto dos dados s„o considerados **dados de treino**. Os dados de treino ser„o utilizados para treinar todos os modelos durante a aprendizagem, e os dados de teste s„o utilizados para avaliar os modelos. Vamos definir dois objetos diferentes no R a partir dos dados apresentados, um para dados de treino, e um para dados de teste:
+Como discutido anteriormente, qualquer modelo de aprendizagem de m√°quina supervisionado precisa de dados de treino e de teste. Se o seu estudo apresenta um tamanho amostral consider√°vel e voc√™ acredita que seja representativo da popula√ß√£o que pretende estudar, a melhor maneira √© definir uma porcentagem dos seus dados que nunca ser√° usada na modelagem. Esta parte dos dados √© chamada de **dados de teste**. No in√≠cio da an√°lise, voc√™ precisa fazer uma amostragem aleat√≥ria de todos os dados para separar estes indiv√≠duos em um objeto do R que ser√° usado posteriormente para avaliar o desempenho dos modelos criados. O resto dos dados s√£o considerados **dados de treino**. Os dados de treino ser√£o utilizados para treinar todos os modelos durante a aprendizagem, e os dados de teste s√£o utilizados para avaliar os modelos. Vamos definir dois objetos diferentes no R a partir dos dados apresentados, um para dados de treino, e um para dados de teste:
 
 ```{r, eval=F, echo=T}
 # Vamos distribuir os dados em 70% para treino e 30% para teste
@@ -82,18 +82,18 @@ Como discutido anteriormente, qualquer modelo de aprendizagem de m·quina supervi
 # Definir tamanho amostral dos dados completos
 n = nrow(dados_ML_supervisionado)
 
-# Definir regra de aleatoriedade (garante que seja aleatÛrio, mas igual toda vez que o comando È repetido)
+# Definir regra de aleatoriedade (garante que seja aleat√≥rio, mas igual toda vez que o comando √© repetido)
 set.seed(1234)
 
 #Fazer amostragem do treino (70%)
 indices_treino <- sample(n, size = 0.7*n)
 dados_ML_supervisionado_TREINO <- dados_ML_supervisionado[indices_treino,]
 
-# O restante dos dados (30%) ser· teste
+# O restante dos dados (30%) ser√° teste
 indices_teste <- setdiff(1:n, indices_treino)
 dados_ML_supervisionado_TESTE <- dados_ML_supervisionado[indices_teste,]
 
-# Conferir n˙mero de linhas dos dados de treino e teste
+# Conferir n√∫mero de linhas dos dados de treino e teste
 nrow(dados_ML_supervisionado_TREINO)
 nrow(dados_ML_supervisionado_TESTE)
 
@@ -102,97 +102,97 @@ nrow(dados_ML_supervisionado_TESTE)
 
 ### O pacote `mlr`
 
-O pacote `mlr` ser· utilizado para facilitar o desenho de experimentos de aprendizagem de m·quina no R. Este pacote apresenta documentaÁ„o detalhada, e permite a aplicaÁ„o de diversos modelos de aprendizagem de m·quina usando uma sintaxe similar, mesmo para modelos completamente diferentes. Isso facilita a aprendizagem e aplicaÁ„o destes modelos. Para mais informaÁıes sobre este pacote, acesse o site https://mlr.mlr-org.com/index.html.
+O pacote `mlr` ser√° utilizado para facilitar o desenho de experimentos de aprendizagem de m√°quina no R. Este pacote apresenta documenta√ß√£o detalhada, e permite a aplica√ß√£o de diversos modelos de aprendizagem de m√°quina usando uma sintaxe similar, mesmo para modelos completamente diferentes. Isso facilita a aprendizagem e aplica√ß√£o destes modelos. Para mais informa√ß√µes sobre este pacote, acesse o site https://mlr.mlr-org.com/index.html.
 
-A interface do pacote `mlr` precisa que o usu·rio defina **tarefas** (*tasks*), **mÈtodos de aprendizagem** (*learners*) e  **medidas de avaliaÁ„o de desempenho** (*performance measures*). AplicaÁıes mais avanÁadas tambÈm necessitam definiÁıes de **estratÈgias de amostragem** (*resampling*) e **ajuste de hiperpar‚metros** (*hyperparameter tuning*). Vamos brevemente discutir estas definiÁıes e explorar o uso por meio de exemplos.
+A interface do pacote `mlr` precisa que o usu√°rio defina **tarefas** (*tasks*), **m√©todos de aprendizagem** (*learners*) e  **medidas de avalia√ß√£o de desempenho** (*performance measures*). Aplica√ß√µes mais avan√ßadas tamb√©m necessitam defini√ß√µes de **estrat√©gias de amostragem** (*resampling*) e **ajuste de hiperpar√¢metros** (*hyperparameter tuning*). Vamos brevemente discutir estas defini√ß√µes e explorar o uso por meio de exemplos.
 
-… necess·rio criar objetos especÌficos do R para cada tarefa que pretende realizar. As tarefas contÍm informaÁıes sobre os dados, como por exemplo qual vari·vel È o desfecho e quais vari·veis s„o os preditores. As tarefas tambÈm apresentam o tipo de problema de aprendizagem de m·quina que estamos lidando (ex: classificaÁ„o, regress„o, sobrevida, etc.). Vamos definir algumas tarefas de classificaÁ„o abaixo:
+√â necess√°rio criar objetos espec√≠ficos do R para cada tarefa que pretende realizar. As tarefas cont√™m informa√ß√µes sobre os dados, como por exemplo qual vari√°vel √© o desfecho e quais vari√°veis s√£o os preditores. As tarefas tamb√©m apresentam o tipo de problema de aprendizagem de m√°quina que estamos lidando (ex: classifica√ß√£o, regress√£o, sobrevida, etc.). Vamos definir algumas tarefas de classifica√ß√£o abaixo:
 
 ```{r, eval=F, echo=T}
-# Criar uma tarefa de classificaÁ„o utilizando apenas rs190962 como preditor e Status como desfecho, nos dados de TREINO
+# Criar uma tarefa de classifica√ß√£o utilizando apenas rs190962 como preditor e Status como desfecho, nos dados de TREINO
 class.task.treino.rs190962 = makeClassifTask(data = select(dados_ML_supervisionado_TREINO,Status,rs190962), target = "Status")
 
-# Criar uma tarefa de classificaÁ„o utilizando apenas rs190962 como preditor e Status como desfecho, nos dados de TESTE
+# Criar uma tarefa de classifica√ß√£o utilizando apenas rs190962 como preditor e Status como desfecho, nos dados de TESTE
 class.task.teste.rs190962 = makeClassifTask(data = select(dados_ML_supervisionado_TESTE,Status,rs190962), target = "Status")
 
-# Criar uma tarefa de classificaÁ„o utilizando todos os SNPs dos dados de TREINO, e definindo o desfecho como `Status`, excluindo a coluna "id"
+# Criar uma tarefa de classifica√ß√£o utilizando todos os SNPs dos dados de TREINO, e definindo o desfecho como `Status`, excluindo a coluna "id"
 class.task.treino.todos = makeClassifTask(data = select(dados_ML_supervisionado_TREINO,-id), target = "Status")
 
-# Criar uma tarefa de classificaÁ„o utilizando todos os SNPs dos dados de TESTE, e definindo o desfecho como `Status`, excluindo a coluna "id"
+# Criar uma tarefa de classifica√ß√£o utilizando todos os SNPs dos dados de TESTE, e definindo o desfecho como `Status`, excluindo a coluna "id"
 class.task.teste.todos = makeClassifTask(data = select(dados_ML_supervisionado_TESTE,-id), target = "Status")
 
 ```
 
-Como È possÌvel observar, podemos definir diferentes tarefas para o mesmo problema (mesmos dados, ou parte dos dados). Durante a aplicaÁ„o dos mÈtodos de aprendizagem que vamos realizar a seguir, nÛs iremos testar diferentes tarefas, tanto dos dados de treino quanto dos dados de teste. Assim, È importante ter em mente que a criaÁ„o de diferentes tarefas È essencial para definir o melhor modelo possÌvel. Isso significa que nem sempre o modelo com todas as vari·veis independentes ser· sempre o melhor. Muitas vezes, quanto mais s„o incluÌdas, maiores as chances dos modelos n„o convergirem para uma soluÁ„o ˙nica, e maiores as chances de **sobreajuste** (*overfitting*).
+Como √© poss√≠vel observar, podemos definir diferentes tarefas para o mesmo problema (mesmos dados, ou parte dos dados). Durante a aplica√ß√£o dos m√©todos de aprendizagem que vamos realizar a seguir, n√≥s iremos testar diferentes tarefas, tanto dos dados de treino quanto dos dados de teste. Assim, √© importante ter em mente que a cria√ß√£o de diferentes tarefas √© essencial para definir o melhor modelo poss√≠vel. Isso significa que nem sempre o modelo com todas as vari√°veis independentes ser√° sempre o melhor. Muitas vezes, quanto mais s√£o inclu√≠das, maiores as chances dos modelos n√£o convergirem para uma solu√ß√£o √∫nica, e maiores as chances de **sobreajuste** (*overfitting*).
 
-Antes de explorarmos os mÈtodos de aprendizagem, apenas nos resta definir as medidas de avaliaÁ„o de desempenho. Estas medidas representam qu„o bom o modelo que estamos testando È. Esta p·gina apresenta todos as medidas de desempenho disponÌveis no pacote `mlr`: https://mlr.mlr-org.com/articles/tutorial/measures.html. As medidas que vamos utilizar para avaliar nossos modelos est„o descritas abaixo (fonte das imagens: https://medium.com/greyatom/performance-metrics-for-classification-problems-in-machine-learning-part-i-b085d432082b)
+Antes de explorarmos os m√©todos de aprendizagem, apenas nos resta definir as medidas de avalia√ß√£o de desempenho. Estas medidas representam qu√£o bom o modelo que estamos testando √©. Esta p√°gina apresenta todos as medidas de desempenho dispon√≠veis no pacote `mlr`: https://mlr.mlr-org.com/articles/tutorial/measures.html. As medidas que vamos utilizar para avaliar nossos modelos est√£o descritas abaixo (fonte das imagens: https://medium.com/greyatom/performance-metrics-for-classification-problems-in-machine-learning-part-i-b085d432082b)
 
-- **Acur·cia** (*accuracy*): N˙mero de classificaÁıes corretas sobre o total de classificaÁıes.
+- **Acur√°cia** (*accuracy*): N√∫mero de classifica√ß√µes corretas sobre o total de classifica√ß√µes.
 <center>
-![](../images/accuracy.png)
+![](images/accuracy.png)
 </center>
 
-- **Acur·cia balanceada** (*balanced accuracy*): MÈdia do n˙mero de classificaÁıes corretas sobre o total de classificaÁıes para cada categoria separadamente. Essa medida È preferÌvel quando as classes do desfecho n„o s„o balanceadas (ex: n˙mero de controles È muito maior que o de casos).
+- **Acur√°cia balanceada** (*balanced accuracy*): M√©dia do n√∫mero de classifica√ß√µes corretas sobre o total de classifica√ß√µes para cada categoria separadamente. Essa medida √© prefer√≠vel quando as classes do desfecho n√£o s√£o balanceadas (ex: n√∫mero de controles √© muito maior que o de casos).
 
-- **Precis„o ou valor preditivo positivo** (*Precision*): N˙mero de positivos verdadeiros sobre o total de positivos.
+- **Precis√£o ou valor preditivo positivo** (*Precision*): N√∫mero de positivos verdadeiros sobre o total de positivos.
 <center>
-![](../images/precision.png)
+![](images/precision.png)
 </center>
 
-- **RevocaÁ„o / Sensibilidade** (*Recall ou Sensitivity*): N˙mero de positivos verdadeiros sobre o total de verdadeiros. TambÈm chamada de taxa de positivos verdadeiros.
+- **Revoca√ß√£o / Sensibilidade** (*Recall ou Sensitivity*): N√∫mero de positivos verdadeiros sobre o total de verdadeiros. Tamb√©m chamada de taxa de positivos verdadeiros.
 <center>
-![](../images/recall.png)
+![](images/recall.png)
 </center>
 
-- **Especificidade** (*Specificity*): N˙mero de negativos verdadeiros sobre o total de negativos. TambÈm chamada de taxa de negativos verdadeiros.
+- **Especificidade** (*Specificity*): N√∫mero de negativos verdadeiros sobre o total de negativos. Tamb√©m chamada de taxa de negativos verdadeiros.
 <center>
-![](../images/specificity.png)
+![](images/specificity.png)
 </center>
 
-- **Escore F1** (*F1-score*): MÈdia harmÙnica entre precis„o e recall. Valores prÛximos de 1 indicam que o modelo de classificaÁ„o È bom.
+- **Escore F1** (*F1-score*): M√©dia harm√¥nica entre precis√£o e recall. Valores pr√≥ximos de 1 indicam que o modelo de classifica√ß√£o √© bom.
 <center>
-![](../images/f1.png)
+![](images/f1.png)
 </center>
 
 
-- **¡rea sob a curva ROC** (*Area under receiver operating characteristic curve*): ¡rea sob a curva da relaÁ„o entre `1-especificidade` e `sensibilidade`. Valores prÛximos de 1 indicam que o modelo de classificaÁ„o È bom.
+- **√Årea sob a curva ROC** (*Area under receiver operating characteristic curve*): √Årea sob a curva da rela√ß√£o entre `1-especificidade` e `sensibilidade`. Valores pr√≥ximos de 1 indicam que o modelo de classifica√ß√£o √© bom.
 <center>
-![](../images/auc.png)
+![](images/auc.png)
 </center>
 
-Vamos definir no R todas as medidas de avaliaÁ„o de desempenho, para que possamos usar nos mÈtodos de aprendizagem deste tutorial.
+Vamos definir no R todas as medidas de avalia√ß√£o de desempenho, para que possamos usar nos m√©todos de aprendizagem deste tutorial.
 ```{r, eval=F, echo=T}
-# Definindo um objeto com todas as medidas de avaliaÁ„o de desempenho mencionadas. Para o pacote mlr, È necess·rio criar uma lista
+# Definindo um objeto com todas as medidas de avalia√ß√£o de desempenho mencionadas. Para o pacote mlr, √© necess√°rio criar uma lista
 medidas_desemp <- list(acc, bac,ppv, tpr, f1, auc)
 ```
 
 
-### MÈtodos de aprendizagem
+### M√©todos de aprendizagem
 
-ApÛs as definiÁıes dos dados de treino e teste, tarefas e medidas de avaliaÁ„o de desempenho, estamos prontos para explorar diferentes modelos de classificaÁ„o. Apenas lembrando que nosso objetivo È tentar predizer **Status** dos indivÌduos (Caso/Controle) utilizando um total de **20 SNPs** em 800 casos e 800 controles. NÛs j· definimos os dados que ser„o usados para treino (`dados_ML_supervisionado_TREINO`) e teste (`dados_ML_supervisionado_TESTE`) e definimos as medidas de desempenho que vamos utilizar para avaliar os modelos (`medidas_desemp`). NÛs tambÈm definimos algumas tarefas, recapituladas abaixo:  
+Ap√≥s as defini√ß√µes dos dados de treino e teste, tarefas e medidas de avalia√ß√£o de desempenho, estamos prontos para explorar diferentes modelos de classifica√ß√£o. Apenas lembrando que nosso objetivo √© tentar predizer **Status** dos indiv√≠duos (Caso/Controle) utilizando um total de **20 SNPs** em 800 casos e 800 controles. N√≥s j√° definimos os dados que ser√£o usados para treino (`dados_ML_supervisionado_TREINO`) e teste (`dados_ML_supervisionado_TESTE`) e definimos as medidas de desempenho que vamos utilizar para avaliar os modelos (`medidas_desemp`). N√≥s tamb√©m definimos algumas tarefas, recapituladas abaixo:  
 
 - `class.task.treino.rs190962`: tarefa para predizer desfecho usando dados apenas do SNP rs190962;
-- `class.task.teste.rs190962`: tarefa para avaliar prediÁ„o usando apenas o SNP rs190962;
+- `class.task.teste.rs190962`: tarefa para avaliar predi√ß√£o usando apenas o SNP rs190962;
 - `class.task.treino.todos`: tarefa para predizer desfecho usando todos os SNPs;
-- `class.task.teste.todos`: tarefa para avaliar prediÁ„o usando todos os SNPs.
+- `class.task.teste.todos`: tarefa para avaliar predi√ß√£o usando todos os SNPs.
 
-A ˙ltima definiÁ„o que precisamos fazer s„o os mÈtodos de aprendizagem. Estes se referem aos nomes dos diferentes modelos que podem ser utilizados para uma tarefa especÌfica (ex: regress„o logÌstica, *support vector machines*, *random forests*, etc.) A seguir, vamos discutir brevemente diferentes mÈtodos de aprendizagem e defini-los.
+A √∫ltima defini√ß√£o que precisamos fazer s√£o os m√©todos de aprendizagem. Estes se referem aos nomes dos diferentes modelos que podem ser utilizados para uma tarefa espec√≠fica (ex: regress√£o log√≠stica, *support vector machines*, *random forests*, etc.) A seguir, vamos discutir brevemente diferentes m√©todos de aprendizagem e defini-los.
 
-## Regress„o logÌstica
+## Regress√£o log√≠stica
 
-O objetivo da regress„o logÌstica em aprendizagem de m·quina È ajustar um modelo de prediÁ„o, de maneira a avaliar a probabilidade de um determinado valor de vari·veis independentes pertencer a uma das categorias do desfecho. Em nosso exemplo, estamos calculando a probabilidade de pertencer ‡ categoria `Caso` dado um determinado valor de cada genÛtipo (`0`, `1` ou `2`).
+O objetivo da regress√£o log√≠stica em aprendizagem de m√°quina √© ajustar um modelo de predi√ß√£o, de maneira a avaliar a probabilidade de um determinado valor de vari√°veis independentes pertencer a uma das categorias do desfecho. Em nosso exemplo, estamos calculando a probabilidade de pertencer √† categoria `Caso` dado um determinado valor de cada gen√≥tipo (`0`, `1` ou `2`).
 
-O resultado de uma regress„o logÌstica, por ser uma probabilidade, È um valor que varia entre 0 e 1. Por ser um modelo de classificaÁ„o, o objetivo È utilizar a probabilidade resultante do modelo de regress„o logÌstica para informar a categoria do desfecho que uma observaÁ„o pertence. De maneira padr„o, caso a probabilidade de uma determinada observaÁ„o de pertencer ‡ uma categoria do desfecho seja > 0.5, esta observaÁ„o È classificada nesta categoria. No fim, a categoria predita de cada observaÁ„o È comparada com a categoria real, e as diferentes medidas de desempenho s„o calculadas, indicando se o modelo de classificaÁ„o È bom ou n„o.
+O resultado de uma regress√£o log√≠stica, por ser uma probabilidade, √© um valor que varia entre 0 e 1. Por ser um modelo de classifica√ß√£o, o objetivo √© utilizar a probabilidade resultante do modelo de regress√£o log√≠stica para informar a categoria do desfecho que uma observa√ß√£o pertence. De maneira padr√£o, caso a probabilidade de uma determinada observa√ß√£o de pertencer √† uma categoria do desfecho seja > 0.5, esta observa√ß√£o √© classificada nesta categoria. No fim, a categoria predita de cada observa√ß√£o √© comparada com a categoria real, e as diferentes medidas de desempenho s√£o calculadas, indicando se o modelo de classifica√ß√£o √© bom ou n√£o.
 
-Vamos fazer um exemplo simples de regress„o logÌstica usando a tarefa `class.task.treino.rs190962`. Primeiramente, vamos definir o mÈtodo de aprendizagem:
+Vamos fazer um exemplo simples de regress√£o log√≠stica usando a tarefa `class.task.treino.rs190962`. Primeiramente, vamos definir o m√©todo de aprendizagem:
 
 ```{r, eval=F, echo=T}
-# Definir mÈtodo de aprendizagem da Regress„o LogÌstica, e definir que o resultado da prediÁ„o È do tipo "prob", ou seja, para cada observaÁ„o, calcular a probabilidade de ser "Caso" dado o(s) genÛtipo(s) para o(s) SNP(s) estudados
+# Definir m√©todo de aprendizagem da Regress√£o Log√≠stica, e definir que o resultado da predi√ß√£o √© do tipo "prob", ou seja, para cada observa√ß√£o, calcular a probabilidade de ser "Caso" dado o(s) gen√≥tipo(s) para o(s) SNP(s) estudados
 metodo.RL <- makeLearner("classif.logreg", predict.type = "prob")
 
 ```
 
-Em seguida, vamos treinar o mÈtodo que definimos (`metodo.RL`) na tarefa `class.task.treino.rs190962`, e olhar alguns resultados nos dados de treino, inclusive o desempenho do modelo nos dados de treino.
+Em seguida, vamos treinar o m√©todo que definimos (`metodo.RL`) na tarefa `class.task.treino.rs190962`, e olhar alguns resultados nos dados de treino, inclusive o desempenho do modelo nos dados de treino.
 
 ```{r, eval=F, echo=T}
 # Treinar o modelo
@@ -204,25 +204,25 @@ getLearnerModel(modelo.RL.treino.rs190962)
 # Observar os coeficientes do modelo
 summary(getLearnerModel(modelo.RL.treino.rs190962))
 
-# Fazer prediÁıes nos dados de treino
+# Fazer predi√ß√µes nos dados de treino
 pred.modelo.RL.rs190962.treino <- predict(modelo.RL.treino.rs190962, task = class.task.treino.rs190962)
 
-# Calcular a matriz de confus„o para observar quantas observaÁıes foram classificadas corretamente
+# Calcular a matriz de confus√£o para observar quantas observa√ß√µes foram classificadas corretamente
 calculateConfusionMatrix(pred.modelo.RL.rs190962.treino)
 
-# Apenas olhando a matriz de confus„o, parece que v·rias observaÁıes foram classificadas erroneamente. Vamos agora calcular todas as medidas de desempenho e avaliar este modelo nos dados de teste.
+# Apenas olhando a matriz de confus√£o, parece que v√°rias observa√ß√µes foram classificadas erroneamente. Vamos agora calcular todas as medidas de desempenho e avaliar este modelo nos dados de teste.
 performance(pred.modelo.RL.rs190962.treino, measures = medidas_desemp)
 
-# Vamos construir a curva ROC desta classificaÁ„o (fpr e tpr s„o 1-especificidade e sensibilidade, respectivamente)
+# Vamos construir a curva ROC desta classifica√ß√£o (fpr e tpr s√£o 1-especificidade e sensibilidade, respectivamente)
 roc_curve.pred.modelo.RL.rs190962.treino <- generateThreshVsPerfData(pred.modelo.RL.rs190962.treino, measures = list(fpr, tpr))
 plotROCCurves(roc_curve.pred.modelo.RL.rs190962.treino)
 
 ```
 
-O objeto `modelo.RL.treino.rs190962` apresenta o nosso primeiro modelo de aprendizagem de m·quina para predizer Status usando o SNP rs190962. Avaliando o desempenho deste modelo nos dados de teste, foi possÌvel observar uma acur·cia de apenas 52.5%, e AUC de 0.528 o que n„o parece muito diferente do acaso (50% ou 0.5, para duas categorias). O que acontece se treinarmos um modelo com todos os SNPs, ao invÈs apenas do SNP rs190962?
+O objeto `modelo.RL.treino.rs190962` apresenta o nosso primeiro modelo de aprendizagem de m√°quina para predizer Status usando o SNP rs190962. Avaliando o desempenho deste modelo nos dados de teste, foi poss√≠vel observar uma acur√°cia de apenas 52.5%, e AUC de 0.528 o que n√£o parece muito diferente do acaso (50% ou 0.5, para duas categorias). O que acontece se treinarmos um modelo com todos os SNPs, ao inv√©s apenas do SNP rs190962?
 
 ```{r, eval=F, echo=T}
-# Treinar o modelo com todos os SNPs. Note que o mÈtodo È o mesmo (metodo.RL)
+# Treinar o modelo com todos os SNPs. Note que o m√©todo √© o mesmo (metodo.RL)
 modelo.RL.treino.todos <- train(learner = metodo.RL, task = class.task.treino.todos)
 
 # Observar o modelo que foi definido
@@ -231,31 +231,31 @@ getLearnerModel(modelo.RL.treino.todos)
 # Observar os coeficientes do modelo
 summary(getLearnerModel(modelo.RL.treino.todos))
 
-# Usar o modelo calculado para fazer prediÁıes nos dados de treino.
+# Usar o modelo calculado para fazer predi√ß√µes nos dados de treino.
 pred.modelo.RL.todos.treino <- predict(modelo.RL.treino.todos, task = class.task.treino.todos)
 
-# Calcule matriz de confus„o
+# Calcule matriz de confus√£o
 calculateConfusionMatrix(pred.modelo.RL.todos.treino)
 
 # Avalie desempenho do novo modelo nos dados de treino
 performance(pred.modelo.RL.todos.treino, measures = medidas_desemp)
 
-# Vamos construir a curva ROC desta classificaÁ„o
+# Vamos construir a curva ROC desta classifica√ß√£o
 roc_curve.pred.modelo.RL.todos.treino <- generateThreshVsPerfData(pred.modelo.RL.todos.treino, measures = list(fpr, tpr))
 plotROCCurves(roc_curve.pred.modelo.RL.todos.treino)
 
 
 ```
 
-Ao incluir mais vari·veis, nosso novo modelo parece ser um pouco melhor, com acur·cia de 58.8%, e AUC de 0.627. No entando, n„o podemos dizer que este È um modelo muito bom. AlÈm disso, estamos avaliando o desempenho dos modelos nos mesmos dados que foram utilizados para o treino. Idealmente, precisamos avaliar estes modelos nos dados de teste. Vamos fazer isso agora e verificar se estas prediÁıes, mesmo que deficientes, s„o consistentes em dados que n„o foram utilizados no treino.
+Ao incluir mais vari√°veis, nosso novo modelo parece ser um pouco melhor, com acur√°cia de 58.8%, e AUC de 0.627. No entando, n√£o podemos dizer que este √© um modelo muito bom. Al√©m disso, estamos avaliando o desempenho dos modelos nos mesmos dados que foram utilizados para o treino. Idealmente, precisamos avaliar estes modelos nos dados de teste. Vamos fazer isso agora e verificar se estas predi√ß√µes, mesmo que deficientes, s√£o consistentes em dados que n√£o foram utilizados no treino.
 
 ```{r, eval=F, echo=T}
 
-# Usar os modelos calculados para fazer prediÁıes nos dados de teste
+# Usar os modelos calculados para fazer predi√ß√µes nos dados de teste
 pred.modelo.RL.rs190962.teste <- predict(modelo.RL.treino.rs190962, task = class.task.teste.rs190962)
 pred.modelo.RL.todos.teste <- predict(modelo.RL.treino.todos, task = class.task.teste.todos)
 
-# Calcule matrizes de confus„o
+# Calcule matrizes de confus√£o
 calculateConfusionMatrix(pred.modelo.RL.rs190962.teste)
 calculateConfusionMatrix(pred.modelo.RL.todos.teste)
 
@@ -270,17 +270,17 @@ plotROCCurves(roc_curve.pred.modelo.RL.todos.teste)
 
 ```
 
-**De acordo os resultados das medidas de desempenho nos dados de teste, como vocÍ avaliaria estes modelos?**
+**De acordo os resultados das medidas de desempenho nos dados de teste, como voc√™ avaliaria estes modelos?**
 
-Infelizmente, parece que a regress„o logÌstica n„o È um modelo muito adequado para classificar Status a partir de dados de genotipagem de SNPs (pelo menos nestes dados simulados). PorÈm, como todo experimento computacional em aprendizagem de m·quina, È possÌvel testarmos outros mÈtodos.
+Infelizmente, parece que a regress√£o log√≠stica n√£o √© um modelo muito adequado para classificar Status a partir de dados de genotipagem de SNPs (pelo menos nestes dados simulados). Por√©m, como todo experimento computacional em aprendizagem de m√°quina, √© poss√≠vel testarmos outros m√©todos.
 
 ## Support Vector Machines (SVM)
 
-Support vetor machine È um mÈtodo que se baseia nas coordenadas de cada observaÁ„o em relaÁ„o a todas as vari·veis independentes. O objetivo È identificar o "hiperplano" ou conjunto de funÁıes que determinam cortes nas coordenadas, de maneira a otimizar a classificaÁ„o e minimar erros de classificaÁ„o. Vamos avaliar se SVMs s„o melhores para classificar Status com base nos SNPs. Etapas semelhantes ‡s anteriores ser„o realizadas, mas agora definindo um novo mÈtodo de aprendizagem: SVMs.
+Support vetor machine √© um m√©todo que se baseia nas coordenadas de cada observa√ß√£o em rela√ß√£o a todas as vari√°veis independentes. O objetivo √© identificar o "hiperplano" ou conjunto de fun√ß√µes que determinam cortes nas coordenadas, de maneira a otimizar a classifica√ß√£o e minimar erros de classifica√ß√£o. Vamos avaliar se SVMs s√£o melhores para classificar Status com base nos SNPs. Etapas semelhantes √†s anteriores ser√£o realizadas, mas agora definindo um novo m√©todo de aprendizagem: SVMs.
 
 
 ```{r, eval=F, echo=T}
-# Definir mÈtodo de aprendizagem de Support Vector Machines
+# Definir m√©todo de aprendizagem de Support Vector Machines
 metodo.SVM <- makeLearner("classif.ksvm", predict.type = "prob")
 
 # A partir de agora, vamos treinar modelos com todos os SNPs
@@ -289,10 +289,10 @@ modelo.SVM.treino.todos <- train(learner = metodo.SVM, task = class.task.treino.
 # Observar o modelo que foi definido
 getLearnerModel(modelo.SVM.treino.todos)
 
-# Usar o modelo calculado para fazer prediÁıes nos dados de treino.
+# Usar o modelo calculado para fazer predi√ß√µes nos dados de treino.
 pred.modelo.SVM.todos.treino <- predict(modelo.SVM.treino.todos, task = class.task.treino.todos)
 
-# Calcule matriz de confus„o
+# Calcule matriz de confus√£o
 calculateConfusionMatrix(pred.modelo.SVM.todos.treino)
 
 # Avalie desempenho do modelo nos dados de treino
@@ -302,14 +302,14 @@ plotROCCurves(roc_curve.pred.modelo.SVM.todos.treino)
 
 ```
 
-Parece que SVM È um mÈtodo um pouco melhor de classificar Status usando os SNPs destes dados! Chegamos a uma acur·cia de 70.4%, e AUC de 0.79, melhores que o desempenho da regress„o logÌstica. No entanto, precisamos avaliar este modelo nos dados de teste, para garantir que este modelo È generaliz·vel:
+Parece que SVM √© um m√©todo um pouco melhor de classificar Status usando os SNPs destes dados! Chegamos a uma acur√°cia de 70.4%, e AUC de 0.79, melhores que o desempenho da regress√£o log√≠stica. No entanto, precisamos avaliar este modelo nos dados de teste, para garantir que este modelo √© generaliz√°vel:
 
 ```{r, eval=F, echo=T}
 
-# Usar o modelo calculado para fazer prediÁıes nos dados de teste
+# Usar o modelo calculado para fazer predi√ß√µes nos dados de teste
 pred.modelo.SVM.todos.teste <- predict(modelo.SVM.treino.todos, task = class.task.teste.todos)
 
-# Calcular a matriz de confus„o
+# Calcular a matriz de confus√£o
 calculateConfusionMatrix(pred.modelo.SVM.todos.teste)
 
 # Avalie desempenho do modelo nos dados de teste
@@ -319,58 +319,58 @@ plotROCCurves(roc_curve.pred.modelo.SVM.todos.teste)
 
 ```
 
-**De acordo os resultados das medidas de desempenho nos dados de teste, como vocÍ avaliaria este modelo?**
+**De acordo os resultados das medidas de desempenho nos dados de teste, como voc√™ avaliaria este modelo?**
 
-Embora o mÈtodo SVM tenha apresentado um desempenho muito bom nos dados de treino, parece que ao ser aplicado nos dados de teste o desempenho diminui consideravelmente (acur·cia de 50.4% e AUC de 0.52). Um dos maiores problemas do mÈtodo SVM È a tendÍncia de sobreajustar. Em outras palavras, o modelo È t„o especÌfico para os dados em que foram treinados, que fica muito difÌcil de generalizar para outros dados. Isso acaba causando um problema, pois os modelos precisam ser generaliz·veis para serem ˙teis.
+Embora o m√©todo SVM tenha apresentado um desempenho muito bom nos dados de treino, parece que ao ser aplicado nos dados de teste o desempenho diminui consideravelmente (acur√°cia de 50.4% e AUC de 0.52). Um dos maiores problemas do m√©todo SVM √© a tend√™ncia de sobreajustar. Em outras palavras, o modelo √© t√£o espec√≠fico para os dados em que foram treinados, que fica muito dif√≠cil de generalizar para outros dados. Isso acaba causando um problema, pois os modelos precisam ser generaliz√°veis para serem √∫teis.
 
-No entanto È uma Ûtima oportunidade para explorar dois conceitos relevantes em aprendizagem de m·quina: **estratÈgias de amostragem** e **ajuste de hiperpar‚metros**.
+No entanto √© uma √≥tima oportunidade para explorar dois conceitos relevantes em aprendizagem de m√°quina: **estrat√©gias de amostragem** e **ajuste de hiperpar√¢metros**.
 
-Uma das maneiras de diminuir o efeito do sobreajuste È treinar os modelos em diferentes "partes" dos dados de treino, e testar na parte restante. O pacote `mlr` permite realizar estes experimentos de amostragem de maneira descomplicada. … importante ressaltar que durante a amostragem, os dados de treino s„o subdivididos em "treino e teste". Este "teste" È diferente dos dados de teste que definimos no comeÁo, pois È uma subamostra dos dados de treino. Isso permite que os modelos n„o sofram efeitos de sobreajuste, pois observam diferentes combinaÁıes de dados de treino. Uma das estratÈgias de amostragem mais comuns È chamada de ***cross-validation***. Veja a figura abaixo.
+Uma das maneiras de diminuir o efeito do sobreajuste √© treinar os modelos em diferentes "partes" dos dados de treino, e testar na parte restante. O pacote `mlr` permite realizar estes experimentos de amostragem de maneira descomplicada. √â importante ressaltar que durante a amostragem, os dados de treino s√£o subdivididos em "treino e teste". Este "teste" √© diferente dos dados de teste que definimos no come√ßo, pois √© uma subamostra dos dados de treino. Isso permite que os modelos n√£o sofram efeitos de sobreajuste, pois observam diferentes combina√ß√µes de dados de treino. Uma das estrat√©gias de amostragem mais comuns √© chamada de ***cross-validation***. Veja a figura abaixo.
 
 <center>
-![](../images/TR_TE.png)
+![](images/TR_TE.png)
 </center>
 
-A figura representa um exemplo de definiÁ„o de treino e teste ideal em experimentos de aprendizagem de m·quina, seguido de **4-fold cross-validation**. Neste exemplo, 80% dos dados s„o utilizados para treino, e 20% para teste (azul escuro e laranja escuro, respectivamente). Os 20% de dados em laranja escuro nunca ser„o usados para treinar modelos, apenas para avaliar desempenho dos modelos criados a partir dos dados de treino (como o que definimos nos modelos anteriores). O restante (80% azul escuro) se„o usados para treino, mas em cada etapa de treino È preciso avaliar o desempenho dos modelos usando dados que n„o foram vistos. Esta etapa È chamada de *cross-validation*. Os dados de treino s„o subdivididos novamente em 4 partes, e 75% dos dados de treino s„o usados para treino efetivo, e 25% para teste. Em seguida, outros 75% s„o utilizados para treino efetivo, e os 25% restantes para teste. No fim de todas as iteraÁıes, os modelos foram ajustados em 4 diferentes configuraÁıes, e por este motivo, È chamado de *4-fold cross-validation*. Existem outras estratÈgias de amostragem que podem ser consideradas (veja aqui: https://mlr.mlr-org.com/articles/tutorial/resample.html), mas n„o ser„o abordadas neste curso.
+A figura representa um exemplo de defini√ß√£o de treino e teste ideal em experimentos de aprendizagem de m√°quina, seguido de **4-fold cross-validation**. Neste exemplo, 80% dos dados s√£o utilizados para treino, e 20% para teste (azul escuro e laranja escuro, respectivamente). Os 20% de dados em laranja escuro nunca ser√£o usados para treinar modelos, apenas para avaliar desempenho dos modelos criados a partir dos dados de treino (como o que definimos nos modelos anteriores). O restante (80% azul escuro) se√£o usados para treino, mas em cada etapa de treino √© preciso avaliar o desempenho dos modelos usando dados que n√£o foram vistos. Esta etapa √© chamada de *cross-validation*. Os dados de treino s√£o subdivididos novamente em 4 partes, e 75% dos dados de treino s√£o usados para treino efetivo, e 25% para teste. Em seguida, outros 75% s√£o utilizados para treino efetivo, e os 25% restantes para teste. No fim de todas as itera√ß√µes, os modelos foram ajustados em 4 diferentes configura√ß√µes, e por este motivo, √© chamado de *4-fold cross-validation*. Existem outras estrat√©gias de amostragem que podem ser consideradas (veja aqui: https://mlr.mlr-org.com/articles/tutorial/resample.html), mas n√£o ser√£o abordadas neste curso.
 
-AlÈm de usar estratÈgias de amostragem, podemos tambÈm fazer o ajuste de hiperpar‚metros do mÈtodo SVM. HiperparÍmtros s„o n˙meros que precisam ser definidos para melhor ajustar modelos de aprendizagem de m·quina. Alguns mÈtodos n„o requerem ajuste de par‚metros, mas outros, como SVM, requerem, pois existem muitas soluÁıes para o problema de minimizaÁ„o do erro de classificaÁ„o. E dependendo de onde o algorÌtmo inicia a busca, soluÁıes muito diferentes podem ser encontradas. O pacote `mlr` facilita a criaÁ„o de "campos de busca de hiperpar‚metros". N„o entraremos em detalhes matem·ticos nos conceitos de hiperpar·metros de SVM, mas h· 2 principais hiperpar‚metros:  
+Al√©m de usar estrat√©gias de amostragem, podemos tamb√©m fazer o ajuste de hiperpar√¢metros do m√©todo SVM. Hiperpar√™mtros s√£o n√∫meros que precisam ser definidos para melhor ajustar modelos de aprendizagem de m√°quina. Alguns m√©todos n√£o requerem ajuste de par√¢metros, mas outros, como SVM, requerem, pois existem muitas solu√ß√µes para o problema de minimiza√ß√£o do erro de classifica√ß√£o. E dependendo de onde o algor√≠tmo inicia a busca, solu√ß√µes muito diferentes podem ser encontradas. O pacote `mlr` facilita a cria√ß√£o de "campos de busca de hiperpar√¢metros". N√£o entraremos em detalhes matem√°ticos nos conceitos de hiperpar√°metros de SVM, mas h√° 2 principais hiperpar√¢metros:  
 
-- *C*: par‚metro de regularizaÁ„o tenta balancear minimizaÁ„o do erro e a capacidade de generalizar o modelo em dados novos  
-- *gamma*: par‚metro que define a influÍncia das observaÁıes prÛximas do plano de decis„o sobre a classificaÁ„o  
+- *C*: par√¢metro de regulariza√ß√£o tenta balancear minimiza√ß√£o do erro e a capacidade de generalizar o modelo em dados novos  
+- *gamma*: par√¢metro que define a influ√™ncia das observa√ß√µes pr√≥ximas do plano de decis√£o sobre a classifica√ß√£o  
 
-Sendo assim, vamos definir nossa estratÈgia de amostragem e o campo de busca de hiperpar‚metros para SVM:
+Sendo assim, vamos definir nossa estrat√©gia de amostragem e o campo de busca de hiperpar√¢metros para SVM:
 
 ```{r, eval=F, echo=T}
-# Criar uma estratÈgia de amostragem do tipo cross-validation. Como nosso N È relativamente grande vamos usar 5-fold cross-validation
+# Criar uma estrat√©gia de amostragem do tipo cross-validation. Como nosso N √© relativamente grande vamos usar 5-fold cross-validation
 est_amost5CV <- makeResampleDesc("CV", iters = 5)
 
-# Definir hiperpar‚metros do SVM que ser„o modificados
-# H· dois principais hiperpar‚metros do SVM que podem ser alterados: C e gamma
+# Definir hiperpar√¢metros do SVM que ser√£o modificados
+# H√° dois principais hiperpar√¢metros do SVM que podem ser alterados: C e gamma
 svm_param <- makeParamSet(
   makeDiscreteParam("C", values = c(0.5, 1.0, 1.5, 2.0)),
   makeDiscreteParam("sigma", values = c(0.5, 1.0, 1.5, 2.0))
 )
 
-# Em seguida, vamos criar um campo de busca que vai explorar todas estas combinaÁıes de par‚metros
+# Em seguida, vamos criar um campo de busca que vai explorar todas estas combina√ß√µes de par√¢metros
 svm_busca <- makeTuneControlGrid()
 
-# Por fim, vamos realizar um experimento de amostragem, explorando as combinaÁıes de hiperpar‚metros que vamos definir
+# Por fim, vamos realizar um experimento de amostragem, explorando as combina√ß√µes de hiperpar√¢metros que vamos definir
 set.seed(1234)
 tunning_svm <- tuneParams(learner = metodo.SVM, task = class.task.treino.todos, resampling = est_amost5CV, par.set = svm_param, control = svm_busca, measures=acc)
 
 ```
 
-ApÛs o ajuste dos par‚metros, parece que temos uma vis„o um pouco mais realista do desempenho de classificaÁ„o do SVM: a maior acur·cia foi de apenas 54.9%, usando o modelo com `C=2` e `sigma=0.5`. Apenas para confirmar, vamos selecionar o melhor modelo e aplic·-lo nos dados de teste.
+Ap√≥s o ajuste dos par√¢metros, parece que temos uma vis√£o um pouco mais realista do desempenho de classifica√ß√£o do SVM: a maior acur√°cia foi de apenas 54.9%, usando o modelo com `C=2` e `sigma=0.5`. Apenas para confirmar, vamos selecionar o melhor modelo e aplic√°-lo nos dados de teste.
 
 ```{r, eval=F, echo=T}
 
-# Extrair o mÈtodo cujo hiperpar‚meteros minimizaram o erro de classificaÁ„o:
+# Extrair o m√©todo cujo hiperpar√¢meteros minimizaram o erro de classifica√ß√£o:
 metodo.SVM.ajustado <- setHyperPars(metodo.SVM, par.vals = tunning_svm$x)
 
-# Treinar novo mÈtodo nos dados de treino
+# Treinar novo m√©todo nos dados de treino
 modelo.SVM.ajustado.treino.todos <- train(learner = metodo.SVM.ajustado, task = class.task.treino.todos)
 
-# Verificar prediÁıes e desempenho nos dados de teste
+# Verificar predi√ß√µes e desempenho nos dados de teste
 pred.modelo.SVM.ajustado.todos.teste <- predict(modelo.SVM.ajustado.treino.todos, task = class.task.teste.todos)
 performance(pred.modelo.SVM.ajustado.todos.teste, measures = medidas_desemp)
 roc_curve.pred.modelo.SVM.ajustado.todos.teste <- generateThreshVsPerfData(pred.modelo.SVM.ajustado.todos.teste, measures = list(fpr, tpr))
@@ -378,21 +378,21 @@ plotROCCurves(roc_curve.pred.modelo.SVM.ajustado.todos.teste)
 
 ```
 
-Estes resultados sugerem que embora o SVM possa encontrar prediÁıes relativamente boas nos dados de treino, quando os modelos s„o avaliados nos dados de teste, o desempenho È compar·vel ‡ regress„o logÌstica.
+Estes resultados sugerem que embora o SVM possa encontrar predi√ß√µes relativamente boas nos dados de treino, quando os modelos s√£o avaliados nos dados de teste, o desempenho √© compar√°vel √† regress√£o log√≠stica.
 
-AtÈ agora, exploramos 2 tipos de mÈtodos de classificaÁ„o supervisionada. Vamos agora explorar um mÈtodo chamado K Nearest Neighbors.
+At√© agora, exploramos 2 tipos de m√©todos de classifica√ß√£o supervisionada. Vamos agora explorar um m√©todo chamado K Nearest Neighbors.
 
 ## K nearest neighbors (KNN)
 
-Diferentemente dos mÈtodos anteriores, o algoritmo por tr·s do KNN baseia-se na localizaÁ„o de um determinado ponto no plano cartesiano das observaÁıes, e na seleÁ„o de um n˙mero fixo de "vizinhos" deste ponto. Por exemplo, se definirmos o n˙mero de vizinhos como 3 (K=3), para cada regi„o no plano cartesiano, o algoritmo ir· identificar as 3 observaÁıes mais prÛximas deste ponto, e contabilizar o n˙mero de pontos que pertencem a uma categoria versus a outra. Usando esta analogia, È possÌvel verificar que quanto menor o n˙mero de vizinhos, maiores as chances do modelo apresentar boa performance, porÈm maiores as chances do modelo ficar superajustado.
+Diferentemente dos m√©todos anteriores, o algoritmo por tr√°s do KNN baseia-se na localiza√ß√£o de um determinado ponto no plano cartesiano das observa√ß√µes, e na sele√ß√£o de um n√∫mero fixo de "vizinhos" deste ponto. Por exemplo, se definirmos o n√∫mero de vizinhos como 3 (K=3), para cada regi√£o no plano cartesiano, o algoritmo ir√° identificar as 3 observa√ß√µes mais pr√≥ximas deste ponto, e contabilizar o n√∫mero de pontos que pertencem a uma categoria versus a outra. Usando esta analogia, √© poss√≠vel verificar que quanto menor o n√∫mero de vizinhos, maiores as chances do modelo apresentar boa performance, por√©m maiores as chances do modelo ficar superajustado.
 
-Vamos implementar o algoritmo KNN e verificar se È um bom mÈtodo para classificar Status de acordo com os SNPs em nossos dados.
+Vamos implementar o algoritmo KNN e verificar se √© um bom m√©todo para classificar Status de acordo com os SNPs em nossos dados.
 
 ```{r, eval=F, echo=T}
-# Definir mÈtodo de aprendizagem KNN
+# Definir m√©todo de aprendizagem KNN
 metodo.KNN <- makeLearner("classif.knn")
 
-# Este mÈtodo necessita que as vari·veis independentes estejam em formato numÈrico. Para isso, precisamos definir tarefas especÌficas utilizando dados neste formato. … mais f·cil carregar os dados novamente, sem a opÁ„o 'col.classes="factor"', e criar os dados de treino, teste e tarefas especÌficas para o KNN
+# Este m√©todo necessita que as vari√°veis independentes estejam em formato num√©rico. Para isso, precisamos definir tarefas espec√≠ficas utilizando dados neste formato. √â mais f√°cil carregar os dados novamente, sem a op√ß√£o 'col.classes="factor"', e criar os dados de treino, teste e tarefas espec√≠ficas para o KNN
 dados_ML_supervisionado_knn <- read.table("GAMETES_E3W_20atts_0.2H_EDM-1_1_clean.tsv", header = T)
 n = nrow(dados_ML_supervisionado_knn)
 set.seed(1234)
@@ -408,27 +408,27 @@ class.task.teste.todos_knn = makeClassifTask(data = select(dados_ML_supervisiona
 # Treinar modelos com todos os SNPs nos dados de treino
 modelo.KNN.treino.todos <- train(learner = metodo.KNN, task = class.task.treino.todos_knn)
 
-# Usar o modelo calculado para fazer prediÁıes nos dados de treino.
+# Usar o modelo calculado para fazer predi√ß√µes nos dados de treino.
 pred.modelo.KNN.todos.treino <- predict(modelo.KNN.treino.todos, task = class.task.treino.todos_knn)
 
-# Calcule matriz de confus„o
+# Calcule matriz de confus√£o
 calculateConfusionMatrix(pred.modelo.KNN.todos.treino)
 
-# Como o algoritmo KNN n„o permite o c·clulo da probabilidade de cada obseraÁ„o de pertecer a alguma categoria do desfecho, precisaremos excluir a medida de desempenho "auc", pois esta depende do c·clulo das probabilidades
-medidas_desemp_knn <- medidas_desemp[-length(medidas_desemp)] # estamos removendo o ˙ltimo elemento da lista medidas_desemp
+# Como o algoritmo KNN n√£o permite o c√°clulo da probabilidade de cada obsera√ß√£o de pertecer a alguma categoria do desfecho, precisaremos excluir a medida de desempenho "auc", pois esta depende do c√°clulo das probabilidades
+medidas_desemp_knn <- medidas_desemp[-length(medidas_desemp)] # estamos removendo o √∫ltimo elemento da lista medidas_desemp
 
-# Avalie desempenho do modelo nos dados de treino - n„o È possÌvel fazer a curva ROC para este algorÌtmo, pois as probabilidades das categorias n„o s„o calculadas.
+# Avalie desempenho do modelo nos dados de treino - n√£o √© poss√≠vel fazer a curva ROC para este algor√≠tmo, pois as probabilidades das categorias n√£o s√£o calculadas.
 performance(pred.modelo.KNN.todos.treino, measures = medidas_desemp_knn)
 ```
 
-AtÈ agora, este foi o melhor mÈtodo! Uma acur·cia de 99.8% e um escore F1 de 0.99! No entanto, vamos verificar o desempenho nos dados de teste...
+At√© agora, este foi o melhor m√©todo! Uma acur√°cia de 99.8% e um escore F1 de 0.99! No entanto, vamos verificar o desempenho nos dados de teste...
 
 ```{r, eval=F, echo=T}
 
-# Usar o modelo calculado para fazer prediÁıes nos dados de teste
+# Usar o modelo calculado para fazer predi√ß√µes nos dados de teste
 pred.modelo.KNN.todos.teste <- predict(modelo.KNN.treino.todos, task = class.task.teste.todos_knn)
 
-# Calcular a matriz de confus„o
+# Calcular a matriz de confus√£o
 calculateConfusionMatrix(pred.modelo.KNN.todos.teste)
 
 # Avalie desempenho do modelo nos dados de teste
@@ -436,11 +436,11 @@ performance(pred.modelo.KNN.todos.teste, measures = medidas_desemp_knn)
 
 ```
 
-Novamente, uma indicaÁ„o que nosso modelo est· sobreajustado. O desempenho È muito bom nos dados de treino, mas n„o s„o generaliz·veis para os dados de teste.
+Novamente, uma indica√ß√£o que nosso modelo est√° sobreajustado. O desempenho √© muito bom nos dados de treino, mas n√£o s√£o generaliz√°veis para os dados de teste.
 
-PorÈm, um par‚metro importante que deve ser ajustado no mÈtodo KNN È o n˙mero de vizinhos (K), e o n˙mero de vizinhos padr„o È 1. Como discutido anteriormente, o desempenho de um modelo KNN com K=1 È sempre perfeito. PorÈm, como consequÍncia, n„o È generaliz·vel.
+Por√©m, um par√¢metro importante que deve ser ajustado no m√©todo KNN √© o n√∫mero de vizinhos (K), e o n√∫mero de vizinhos padr√£o √© 1. Como discutido anteriormente, o desempenho de um modelo KNN com K=1 √© sempre perfeito. Por√©m, como consequ√™ncia, n√£o √© generaliz√°vel.
 
-Assim como fizemos com o SVM, vamos fazer o ajuste do hiperpar‚metro `k` para o mÈtodo KNN, e realizar experimentos de amostragem, usando a mesa estratÈgia anterior (5-fold cross validation).
+Assim como fizemos com o SVM, vamos fazer o ajuste do hiperpar√¢metro `k` para o m√©todo KNN, e realizar experimentos de amostragem, usando a mesa estrat√©gia anterior (5-fold cross validation).
 
 ```{r, eval=F, echo=T}
 
@@ -449,59 +449,59 @@ knn_param <- makeParamSet(
   makeDiscreteParam("k", values = c(1:20))
 )
 
-# Em seguida, vamos criar um campo de busca que vai explorar estes par‚metros
+# Em seguida, vamos criar um campo de busca que vai explorar estes par√¢metros
 knn_busca <- makeTuneControlGrid()
 
-# Por fim, vamos realizar um experimento de amostragem, explorando as combinaÁıes de hiperpar‚metros que vamos definir, e indicando que a acur·cia È o mÈtodo de escolha para minimizar
+# Por fim, vamos realizar um experimento de amostragem, explorando as combina√ß√µes de hiperpar√¢metros que vamos definir, e indicando que a acur√°cia √© o m√©todo de escolha para minimizar
 set.seed(1234)
 tunning_knn <- tuneParams(learner = metodo.KNN, task = class.task.treino.todos_knn, resampling = est_amost5CV, par.set = knn_param, control = knn_busca, measures=acc)
 ```
 
-Os resultados do ajuste indicaram que a melhor acur·cia encontrada foi 54.1%, usando `k=16`. Um pouco melhor que nos outros modelos, mas ainda assim n„o È um modelo de classificaÁ„o muito bom. Vamos avaliar os resultados nos dados de teste.
+Os resultados do ajuste indicaram que a melhor acur√°cia encontrada foi 54.1%, usando `k=16`. Um pouco melhor que nos outros modelos, mas ainda assim n√£o √© um modelo de classifica√ß√£o muito bom. Vamos avaliar os resultados nos dados de teste.
 
 ```{r, eval=F, echo=T}
 
-# Extrair o mÈtodo cujo hiperpar‚meteros minimizaram o erro de classificaÁ„o:
+# Extrair o m√©todo cujo hiperpar√¢meteros minimizaram o erro de classifica√ß√£o:
 metodo.KNN.ajustado <- setHyperPars(metodo.KNN, par.vals = tunning_knn$x)
 
-# Treinar novo mÈtodo nos dados de treino
+# Treinar novo m√©todo nos dados de treino
 modelo.KNN.ajustado.treino.todos <- train(learner = metodo.KNN.ajustado, task = class.task.treino.todos_knn)
 
-# Verificar prediÁıes e desempenho nos dados de teste
+# Verificar predi√ß√µes e desempenho nos dados de teste
 pred.modelo.KNN.ajustado.todos.teste <- predict(modelo.KNN.ajustado.treino.todos, task = class.task.teste.todos_knn)
 performance(pred.modelo.KNN.ajustado.todos.teste, measures = medidas_desemp_knn)
 
 ```
 
-Nos dados de teste, a acur·cia foi 52.1% apenas reforÁando que o KNN n„o foi muito eficiente para classificaÁ„o de Status usando SNPs.
+Nos dados de teste, a acur√°cia foi 52.1% apenas refor√ßando que o KNN n√£o foi muito eficiente para classifica√ß√£o de Status usando SNPs.
 
 ## Random Forests (RF)
 
-O ˙ltimo mÈtodo de classificaÁ„o supervisionada que vamos explorar È chamado de Random Forests. Este mÈtodo È baseado em outros mÈtodos de classificaÁ„o chamados de ·rvore de decis„o. MÈtodos baseados em ·rvores tentam dividir os dados por meio de determinados cut-offs das vari·veis independentes, de maneira a maximizar a classificaÁ„o das observaÁıes de acordo com o desfecho. Em ·rvores de decis„o, essas divisıes s„o feitas de maneira hier·rquica, e no final È possÌvel ter uma "·rvore" em que as ramificaÁıes s„o as combinaÁıes de cut-offs de uma ou mais vari·veis.
+O √∫ltimo m√©todo de classifica√ß√£o supervisionada que vamos explorar √© chamado de Random Forests. Este m√©todo √© baseado em outros m√©todos de classifica√ß√£o chamados de √°rvore de decis√£o. M√©todos baseados em √°rvores tentam dividir os dados por meio de determinados cut-offs das vari√°veis independentes, de maneira a maximizar a classifica√ß√£o das observa√ß√µes de acordo com o desfecho. Em √°rvores de decis√£o, essas divis√µes s√£o feitas de maneira hier√°rquica, e no final √© poss√≠vel ter uma "√°rvore" em que as ramifica√ß√µes s√£o as combina√ß√µes de cut-offs de uma ou mais vari√°veis.
 
-Durante o algoritmo, a ideia È aumentar a homogeneidade de cada subgrupo apÛs a divis„o, e neste algoritmo, homogeneidade pode ser definida de diversar maneiras:
+Durante o algoritmo, a ideia √© aumentar a homogeneidade de cada subgrupo ap√≥s a divis√£o, e neste algoritmo, homogeneidade pode ser definida de diversar maneiras:
 
-- **Index Gini:** calculado de acordo com a proporÁ„o do desfecho apÛs cada subdivis„o. Quanto maior o index Gini, mais homogÍnea È a divis„o, e maior a probabilidade de conter apenas um desfecho em cada nodo da ·rvore.
-- **Qui-quadrado:** È uma medida estatÌstica de desvio entre observado e esperado de acordo com o acaso. O qui-quadrado È calculado apÛs cada subdivis„o, e subdivisıes que resultem em um qui-quadrado maior s„o preferÌveis e diminuem a homogeneidade
-- **Ganho de informaÁ„o:** È uma medida baseada em entropia. Quanto mais informaÁ„o È necess·ria para descrever um subdivis„o (maior entropia), mais "impuro" o resultado dessa divis„o È. Assim, subdivisıes que resultam em menor entropia s„o preferÌveis e diminuem homogeneidade.
+- **Index Gini:** calculado de acordo com a propor√ß√£o do desfecho ap√≥s cada subdivis√£o. Quanto maior o index Gini, mais homog√™nea √© a divis√£o, e maior a probabilidade de conter apenas um desfecho em cada nodo da √°rvore.
+- **Qui-quadrado:** √© uma medida estat√≠stica de desvio entre observado e esperado de acordo com o acaso. O qui-quadrado √© calculado ap√≥s cada subdivis√£o, e subdivis√µes que resultem em um qui-quadrado maior s√£o prefer√≠veis e diminuem a homogeneidade
+- **Ganho de informa√ß√£o:** √© uma medida baseada em entropia. Quanto mais informa√ß√£o √© necess√°ria para descrever um subdivis√£o (maior entropia), mais "impuro" o resultado dessa divis√£o √©. Assim, subdivis√µes que resultam em menor entropia s√£o prefer√≠veis e diminuem homogeneidade.
 
-AlÈm destes critÈrios de decis„o, existem diversos par‚metros que podem ser definidos para melhor o desempenho de ·rvores de decis„o: n˙mero mÌnimo de observaÁıes necess·rio para uma subdivis„o, m·ximo n˙mero de observaÁıes para um nodo terminal, m·xima profundidade da ·rvore, e m·ximo n˙mero de vari·veis que s„o consideradas para fazer uma divis„o. Embora em uma situaÁ„o real todos estes par‚metros devam ser ajustados, n„o faremos isto neste tutorial.
+Al√©m destes crit√©rios de decis√£o, existem diversos par√¢metros que podem ser definidos para melhor o desempenho de √°rvores de decis√£o: n√∫mero m√≠nimo de observa√ß√µes necess√°rio para uma subdivis√£o, m√°ximo n√∫mero de observa√ß√µes para um nodo terminal, m√°xima profundidade da √°rvore, e m√°ximo n√∫mero de vari√°veis que s√£o consideradas para fazer uma divis√£o. Embora em uma situa√ß√£o real todos estes par√¢metros devam ser ajustados, n√£o faremos isto neste tutorial.
 
-Random Forests s„o uma extens„o de ·rvores de decis„o, onde diversas ·rvores s„o geradas e analisadas, e em seguida combinadas em um grupo de ·rvores ("floresta") com maior capacidade de prediÁ„o. Cada ·rvore È gerada de maneira aleatÛria com uma amostra dos dados de treino, e uma amostra das vari·veis. O crescimento das ·rvores È realizado de maneiras hier·rquica, e no final cada subdivis„o recebe um voto, e quanto mais votos uma determinada subdivis„o recebe, maior a chance desta subdivis„o ser escolhida no modelo de prediÁ„o final.
+Random Forests s√£o uma extens√£o de √°rvores de decis√£o, onde diversas √°rvores s√£o geradas e analisadas, e em seguida combinadas em um grupo de √°rvores ("floresta") com maior capacidade de predi√ß√£o. Cada √°rvore √© gerada de maneira aleat√≥ria com uma amostra dos dados de treino, e uma amostra das vari√°veis. O crescimento das √°rvores √© realizado de maneiras hier√°rquica, e no final cada subdivis√£o recebe um voto, e quanto mais votos uma determinada subdivis√£o recebe, maior a chance desta subdivis√£o ser escolhida no modelo de predi√ß√£o final.
 
-Vamos implementar Random Forest em nossos dados e verificar se È um bom mÈtodo para classificar Status de acordo com os SNPs.
+Vamos implementar Random Forest em nossos dados e verificar se √© um bom m√©todo para classificar Status de acordo com os SNPs.
 
 ```{r, eval=F, echo=T}
-# Definir mÈtodo de aprendizagem RF, e solicitar o c·clulo da import‚ncia das vari·veis
+# Definir m√©todo de aprendizagem RF, e solicitar o c√°clulo da import√¢ncia das vari√°veis
 metodo.RF <- makeLearner("classif.randomForest", predict.type = "prob", par.vals = list(importance=T))
 
 # Treinar modelos com todos os SNPs nos dados de treino
 modelo.RF.treino.todos <- train(learner = metodo.RF, task = class.task.treino.todos)
 
-# Usar o modelo calculado para fazer prediÁıes nos dados de treino.
+# Usar o modelo calculado para fazer predi√ß√µes nos dados de treino.
 pred.modelo.RF.todos.treino <- predict(modelo.RF.treino.todos, task = class.task.treino.todos)
 
-# Calcule matriz de confus„o
+# Calcule matriz de confus√£o
 calculateConfusionMatrix(pred.modelo.RF.todos.treino)
 
 # Avalie desempenho do modelo nos dados de treino
@@ -510,13 +510,13 @@ roc_curve.pred.modelo.RF.todos.treino <- generateThreshVsPerfData(pred.modelo.RF
 plotROCCurves(roc_curve.pred.modelo.RF.todos.treino)
 ```
 
-Assim como o KNN, RF mostra desempenho muito bom nos dados de treino. No entanto, o que importa È a generalizaÁ„o. Vamos ver como o modelo desempenha nos dados de teste.
+Assim como o KNN, RF mostra desempenho muito bom nos dados de treino. No entanto, o que importa √© a generaliza√ß√£o. Vamos ver como o modelo desempenha nos dados de teste.
 
 ```{r, eval=F, echo=T}
-# Usar o modelo calculado para fazer prediÁıes nos dados de teste
+# Usar o modelo calculado para fazer predi√ß√µes nos dados de teste
 pred.modelo.RF.todos.teste <- predict(modelo.RF.treino.todos, task = class.task.teste.todos)
 
-# Calcular a matriz de confus„o
+# Calcular a matriz de confus√£o
 calculateConfusionMatrix(pred.modelo.RF.todos.teste)
 
 # Avalie desempenho do modelo nos dados de teste
@@ -526,19 +526,10 @@ plotROCCurves(roc_curve.pred.modelo.RF.todos.teste)
 
 ```
 
-Embora a Random Forest tenha derivado o melhor modelo de prediÁ„o nos dados de teste entre todos os modelos avaliados, as medidas ainda assim n„o foram muito boas. Parece que nenhum de nossos modelos foi capaz de establecer uma classificaÁ„o generaliz·vel do Status baseado nos 20 SNPs nestes dados simulados.
+Embora a Random Forest tenha derivado o melhor modelo de predi√ß√£o nos dados de teste entre todos os modelos avaliados, as medidas ainda assim n√£o foram muito boas. Parece que nenhum de nossos modelos foi capaz de establecer uma classifica√ß√£o generaliz√°vel do Status baseado nos 20 SNPs nestes dados simulados.
 
-### Conclus„o
+### Conclus√£o
 
-Neste tutorial, observamos como aplicar diferentes mÈtodos de aprendizagem para classificaÁ„o supervisionada. NÛs exploramos alguns conceitos relacionados ‡ divis„o dos dados entre treino e teste, diferentes mÈtodos de aprendizagem (regress„o logÌstica, SVM, KNN e Random Forests), estratÈgias de amostragem e ajuste de hiperpar‚metros. No nosso exemplo em particular, foi possÌvel observar que dependendo das configuraÁıes de cada modelo, conseguimos alcanÁar um alto desempenho na prediÁ„o utilizando dados de treino, mas estas prediÁıes n„o foram generaliz·veis nos dados de teste. Assim, parece que n„o conseguimos identificar um bom modelo de prediÁ„o de Status usando 20 SNPs.
+Neste tutorial, observamos como aplicar diferentes m√©todos de aprendizagem para classifica√ß√£o supervisionada. N√≥s exploramos alguns conceitos relacionados √† divis√£o dos dados entre treino e teste, diferentes m√©todos de aprendizagem (regress√£o log√≠stica, SVM, KNN e Random Forests), estrat√©gias de amostragem e ajuste de hiperpar√¢metros. No nosso exemplo em particular, foi poss√≠vel observar que dependendo das configura√ß√µes de cada modelo, conseguimos alcan√ßar um alto desempenho na predi√ß√£o utilizando dados de treino, mas estas predi√ß√µes n√£o foram generaliz√°veis nos dados de teste. Assim, parece que n√£o conseguimos identificar um bom modelo de predi√ß√£o de Status usando 20 SNPs.
 
-Existem muitos outros mÈtodos de aprendizagem implementados no pacote `mlr` (https://mlr.mlr-org.com/articles/tutorial/integrated_learners.html). No entanto, a escolha dos dados acaba sendo essencial para definir um modelo de prediÁ„o adequado. Um tÛpico relacionado que n„o ser· abordado em detalhes no curso por conta do tempo È a **SeleÁ„o de Vari·veis** (*feature selection*). Um modelo bem desenhado exige que as vari·veis independentes sejam bem escolhidas. Em muitos casos, temos muitas vari·veis (ex: dados de GWAS, ou de express„o gÍnica em larga escala), e incluir todas as vari·veis no modelo pode ser demais. Existem alguns mÈtodos usados para "filtrar" as vari·veis mais importantes, e alguns s„o descritos aqui: https://mlr.mlr-org.com/articles/tutorial/feature_selection.html. Alguns mÈtodos de aprendizagem incorporam seleÁ„o de vari·veis em seus modelos.
-
-
-
-
-
-
-
-
-
+Existem muitos outros m√©todos de aprendizagem implementados no pacote `mlr` (https://mlr.mlr-org.com/articles/tutorial/integrated_learners.html). No entanto, a escolha dos dados acaba sendo essencial para definir um modelo de predi√ß√£o adequado. Um t√≥pico relacionado que n√£o ser√° abordado em detalhes no curso por conta do tempo √© a **Sele√ß√£o de Vari√°veis** (*feature selection*). Um modelo bem desenhado exige que as vari√°veis independentes sejam bem escolhidas. Em muitos casos, temos muitas vari√°veis (ex: dados de GWAS, ou de express√£o g√™nica em larga escala), e incluir todas as vari√°veis no modelo pode ser demais. Existem alguns m√©todos usados para "filtrar" as vari√°veis mais importantes, e alguns s√£o descritos aqui: https://mlr.mlr-org.com/articles/tutorial/feature_selection.html. Alguns m√©todos de aprendizagem incorporam sele√ß√£o de vari√°veis em seus modelos.

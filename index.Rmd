@@ -2,16 +2,16 @@
 title: "Home"
 ---
 
-Bem-vindos ao curso de **IntroduÁ„o ‡ aprendizagem de m·quina (machine learning) aplicada ‡ an·lise de dados genÈticos**!
+Bem-vindos ao curso de **Introdu√ß√£o √† aprendizagem de m√°quina (machine learning) aplicada √† an√°lise de dados gen√©ticos**!
 
-Este site que contÈm o material pr·tico que ser· utilizado durante as aulas. Utilize o menu acima para navegar entre os diferentes tutoriais, alÈm do cronograma do curso.
+Este site que cont√©m o material pr√°tico que ser√° utilizado durante as aulas. Utilize o menu acima para navegar entre os diferentes tutoriais, al√©m do cronograma do curso.
 
-O link abaixo apresenta a inst‚ncia EC2 da Amazon que hospeda o computador que iremos utilizar nas aulas pr·ticas. O computador estar· disponÌvel apenas durante o perÌodo do curso.  
+O link abaixo apresenta a inst√¢ncia EC2 da Amazon que hospeda o computador que iremos utilizar nas aulas pr√°ticas. O computador estar√° dispon√≠vel apenas durante o per√≠odo do curso.  
 
 - http://ec2-18-231-74-114.sa-east-1.compute.amazonaws.com/
 
-VocÍ dever· ter recebido um nome de usu·rio e senha para poder acessar o RStudio hospedado na inst‚ncia da Amazon.
+Voc√™ dever√° ter recebido um nome de usu√°rio e senha para poder acessar o RStudio hospedado na inst√¢ncia da Amazon.
 
-Caso tenha alguma d˙vida, entre em contato por email: mazzottidr@gmail.com
+Caso tenha alguma d√∫vida, entre em contato por email: mazzottidr@gmail.com
 
 

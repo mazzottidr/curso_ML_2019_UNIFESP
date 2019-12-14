@@ -1,5 +1,5 @@
 ---
-title: "Acesso ‡ inst‚ncia EC2 da Amazon (nuvem)"
+title: "Acesso √† inst√¢ncia EC2 da Amazon (nuvem)"
 author: "Diego Mazzotti"
 date: "16/12/2019"
 output: html_document
@@ -9,68 +9,68 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Este tutorial contÈm instruÁıes para acessar o computador remoto hospedado na Amazon, onde todo o conte˙do pr·tico deste curso est· organizado, e onde todas as an·lises ser„o realizadas. Ao concluir este tutorial, vocÍ ser· capaz de:
+Este tutorial cont√©m instru√ß√µes para acessar o computador remoto hospedado na Amazon, onde todo o conte√∫do pr√°tico deste curso est√° organizado, e onde todas as an√°lises ser√£o realizadas. Ao concluir este tutorial, voc√™ ser√° capaz de:
 
-- Acessar o RStudio hospedado em uma inst‚ncia EC2 da Amazon
+- Acessar o RStudio hospedado em uma inst√¢ncia EC2 da Amazon
 - Explorar algumas funcionalidades do RStudio
 - Fazer download e upload de arquivos em seu computador local
 
 
 ### EC2 da Amazon
 
-O serviÁo **Elastic Compute Cloud** (EC2) da Amazon (<https://aws.amazon.com/ec2/>) permite usu·rios acessarem diversas configuraÁıes de computadores para realizaÁ„o de tarefas na nuvem. Uma das principais caracterÌsticas È a possiblidade de utilizar elevado poder computacional por apenas uma fraÁ„o do custo de um sistema fÌsico, como comprar um computador poderoso.  
+O servi√ßo **Elastic Compute Cloud** (EC2) da Amazon (<https://aws.amazon.com/ec2/>) permite usu√°rios acessarem diversas configura√ß√µes de computadores para realiza√ß√£o de tarefas na nuvem. Uma das principais caracter√≠sticas √© a possiblidade de utilizar elevado poder computacional por apenas uma fra√ß√£o do custo de um sistema f√≠sico, como comprar um computador poderoso.  
 
-Neste curso, usaremos um computador remoto onde ser· possÌvel ter acesso a todos os dados, bem como as ferramentas necess·rias para an·lise destes dados. Este computador remoto j· foi previamente configurado para este curso, mas caso tenha interesse em fazer a sua prÛpria configuraÁ„o para projetos futuros, [este site](http://www.louisaslett.com/RStudio_AMI/) apresenta mais detalhes. Todos os pacotes neces·rios para o curso tambÈm j· foram instalados.
+Neste curso, usaremos um computador remoto onde ser√° poss√≠vel ter acesso a todos os dados, bem como as ferramentas necess√°rias para an√°lise destes dados. Este computador remoto j√° foi previamente configurado para este curso, mas caso tenha interesse em fazer a sua pr√≥pria configura√ß√£o para projetos futuros, [este site](http://www.louisaslett.com/RStudio_AMI/) apresenta mais detalhes. Todos os pacotes neces√°rios para o curso tamb√©m j√° foram instalados.
 
-A maior parte da interface do curso ser· realizada por meio do [RStudio](https://www.rstudio.com/), um ambiente de desenvolvimento integrado que apresenta uma interface mais amig·vel para a linguagem de programaÁ„o [R](https://www.r-project.org/). O R apresenta in˙meras funÁıes e comandos para an·lise de dados, inclusive diversos pacotes voltados ‡ implementaÁ„o de mÈtodos e modelos de aprendizagem de m·quina.
+A maior parte da interface do curso ser√° realizada por meio do [RStudio](https://www.rstudio.com/), um ambiente de desenvolvimento integrado que apresenta uma interface mais amig√°vel para a linguagem de programa√ß√£o [R](https://www.r-project.org/). O R apresenta in√∫meras fun√ß√µes e comandos para an√°lise de dados, inclusive diversos pacotes voltados √† implementa√ß√£o de m√©todos e modelos de aprendizagem de m√°quina.
 
-### Acessando a inst‚ncia deste curso
+### Acessando a inst√¢ncia deste curso
 
-A inst‚ncia prÈ-configurada utilizada por este curso est· disponÌvel no link:
+A inst√¢ncia pr√©-configurada utilizada por este curso est√° dispon√≠vel no link:
 
 - http://ec2-18-231-74-114.sa-east-1.compute.amazonaws.com/
 
-VocÍ deve usar o nome de usu·rio e senha fornecidos para fazer o login. ApÛs autenticaÁ„o, vocÍ ser· apresentado ‡ janela principal do RStudio:
+Voc√™ deve usar o nome de usu√°rio e senha fornecidos para fazer o login. Ap√≥s autentica√ß√£o, voc√™ ser√° apresentado √† janela principal do RStudio:
 
 ![](../images/screenshot_Rstudio.PNG)
 
 
-Esta ser· a interface em que realizar· a maioria das atividades relacionadas a este curso.
+Esta ser√° a interface em que realizar√° a maioria das atividades relacionadas a este curso.
 
 ### Funcionalidades do RStudio
 
-O Rstudio fornece diversas ferramentas para facilitar a an·lise, organizaÁ„o e visualizaÁ„o de dados. Existem 4 janelas principais, onde as seguintes tarefas s„o realizadas:  
+O Rstudio fornece diversas ferramentas para facilitar a an√°lise, organiza√ß√£o e visualiza√ß√£o de dados. Existem 4 janelas principais, onde as seguintes tarefas s√£o realizadas:  
 
-- **Editor de texto:** ·rea onde os scripts s„o desenvolvidos. Algumas funcionalidades incluem realce de sintaxe, autocompletar funÁıes enquanto digita, e rodar comandos usando atalhos no teclado (ex: Ctrl+Enter roda a linha selecionada). … possÌvel ter mais de um script aberto, facilitando o acesso a diferentes projetos.
-- **Console:** ·rea onde os comandos s„o rodados em si. A regi„o do console È onde toda a interaÁ„o com o R acontece. Em atualizaÁıes recentes do RStudio, h· um aba no console que permite acessar um terminal Linux, facilitando interaÁıes diretas com o sistema Linux, caso necess·rio.
-- **Environment/History/Connections:** ·rea que facilita o acesso aos objetos que foram criados, bem como o histÛrico de comandos que foram realizados anteriormente.
-- **Files/Plots/Packages/Help/Viewer:** ·rea que permite o gerenciamento de arquivos, e facilita a navegaÁ„o de diretÛrios e arquivos. Esta ·rea tambÈm oferece a plataforma gr·fica, onde os gr·ficos que vocÍ ir· realizar s„o mostrados, e onde tambÈm a ajuda de funÁıes do R È apresentada, quando solicitada.
+- **Editor de texto:** √°rea onde os scripts s√£o desenvolvidos. Algumas funcionalidades incluem realce de sintaxe, autocompletar fun√ß√µes enquanto digita, e rodar comandos usando atalhos no teclado (ex: Ctrl+Enter roda a linha selecionada). √â poss√≠vel ter mais de um script aberto, facilitando o acesso a diferentes projetos.
+- **Console:** √°rea onde os comandos s√£o rodados em si. A regi√£o do console √© onde toda a intera√ß√£o com o R acontece. Em atualiza√ß√µes recentes do RStudio, h√° um aba no console que permite acessar um terminal Linux, facilitando intera√ß√µes diretas com o sistema Linux, caso necess√°rio.
+- **Environment/History/Connections:** √°rea que facilita o acesso aos objetos que foram criados, bem como o hist√≥rico de comandos que foram realizados anteriormente.
+- **Files/Plots/Packages/Help/Viewer:** √°rea que permite o gerenciamento de arquivos, e facilita a navega√ß√£o de diret√≥rios e arquivos. Esta √°rea tamb√©m oferece a plataforma gr√°fica, onde os gr√°ficos que voc√™ ir√° realizar s√£o mostrados, e onde tamb√©m a ajuda de fun√ß√µes do R √© apresentada, quando solicitada.
 
-Existem outras funcionalidades, porÈm as mais importantes para este curso foram descritas acima.
+Existem outras funcionalidades, por√©m as mais importantes para este curso foram descritas acima.
 
 ### Upload e download de arquivos
 
-Outra funcionalidade interessante do Rstudio È a possiblidade de facilmente transferir arquivos entre o computador local e o EC2 da Amazon. Para explorar esta funcionalidade, bem como relembrar alguns comandos b·sicos do R, faremos o seguinte exercÌcio:
+Outra funcionalidade interessante do Rstudio √© a possiblidade de facilmente transferir arquivos entre o computador local e o EC2 da Amazon. Para explorar esta funcionalidade, bem como relembrar alguns comandos b√°sicos do R, faremos o seguinte exerc√≠cio:
 
-1. Em seu diretÛrio *home*, crie uma pasta (clique em *New Folder*, na aba *Files* ‡ direita) chamada `CursoML2019`. Use o nome como est· representado, sem espaÁos, para manter consistÍncia.
+1. Em seu diret√≥rio *home*, crie uma pasta (clique em *New Folder*, na aba *Files* √† direita) chamada `CursoML2019`. Use o nome como est√° representado, sem espa√ßos, para manter consist√™ncia.
 
-2. Altere o seu diretÛrio de trabalho para a nova pasta `CursoML2019`, clicando na nova pasta, e em seguida em *More > Set As Working Directory*.
+2. Altere o seu diret√≥rio de trabalho para a nova pasta `CursoML2019`, clicando na nova pasta, e em seguida em *More > Set As Working Directory*.
 
-3. FaÁa o download do seguinte arquivo, correspondente a dados simulados de 20 SNPs, em um total de 1600 indivÌduos (800 casos e 800 controles) em seu computador local: [GAMETES_E3W_20atts_0.2H_EDM-1_1_clean.tsv](https://www.dropbox.com/s/5gazzk8z3qf93st/GAMETES_E3W_20atts_0.2H_EDM-1_1_clean.tsv?dl=1).
+3. Fa√ßa o download do seguinte arquivo, correspondente a dados simulados de 20 SNPs, em um total de 1600 indiv√≠duos (800 casos e 800 controles) em seu computador local: [GAMETES_E3W_20atts_0.2H_EDM-1_1_clean.tsv](https://www.dropbox.com/s/5gazzk8z3qf93st/GAMETES_E3W_20atts_0.2H_EDM-1_1_clean.tsv?dl=1).
 
-4. Usando a funÁ„o `Upload` no Rstudio, faÁa a transferÍncia do arquivo `GAMETES_E3W_20atts_0.2H_EDM-1_1_clean.tsv` para a pasta `CursoML2019`. Ao finalizar o download, o arquivo deve aparecer na pasta correspondente.
+4. Usando a fun√ß√£o `Upload` no Rstudio, fa√ßa a transfer√™ncia do arquivo `GAMETES_E3W_20atts_0.2H_EDM-1_1_clean.tsv` para a pasta `CursoML2019`. Ao finalizar o download, o arquivo deve aparecer na pasta correspondente.
 
-5. Para relembrar algumas funÁıes b·sicas do R, bem como praticar alguns comandos, crie um novo script (*File > New File > Rscript*), copie e cole o conte˙do abaixo, e rode as operaÁıes indicadas:
+5. Para relembrar algumas fun√ß√µes b√°sicas do R, bem como praticar alguns comandos, crie um novo script (*File > New File > Rscript*), copie e cole o conte√∫do abaixo, e rode as opera√ß√µes indicadas:
 
 ```{r, eval=F, echo=T}
 
-# Script para processamento b·sico de dados
+# Script para processamento b√°sico de dados
 
-# Carregar pacotes necess·rios
-library(dplyr) # necess·rio para manipulaÁ„o dos dados
-library(tableone) # necess·rio para comparaÁıes entre grupos e realizar tabelas
-library(jtools) # necess·rio para formataÁ„o dos resultados da regress„o logÌstica
-library(ggplot2) # necess·rio para realizaÁ„o dos gr·ficos
+# Carregar pacotes necess√°rios
+library(dplyr) # necess√°rio para manipula√ß√£o dos dados
+library(tableone) # necess√°rio para compara√ß√µes entre grupos e realizar tabelas
+library(jtools) # necess√°rio para formata√ß√£o dos resultados da regress√£o log√≠stica
+library(ggplot2) # necess√°rio para realiza√ß√£o dos gr√°ficos
 
 # Carrregue o arquivo como um objeto do R
 sim_data <- read.table("GAMETES_E3W_20atts_0.2H_EDM-1_1_clean.tsv", header = T)
@@ -81,49 +81,49 @@ sim_data[1:5,1:5]
 # Explore o nome das colunas do arquivo
 colnames(sim_data)
 
-# Conte quantos casos e controles est„o presentes no arquivo
+# Conte quantos casos e controles est√£o presentes no arquivo
 sim_data %>%
         group_by(Status) %>%
         summarize(N=n())
 
-# Conte os genÛtipos do SNP rs190962
+# Conte os gen√≥tipos do SNP rs190962
 sim_data %>%
         group_by(rs190962) %>%
         summarize(N=n())
 
-# Conte os genÛtipos do SNP rs190962, separado para casos e controles
+# Conte os gen√≥tipos do SNP rs190962, separado para casos e controles
 sim_data %>%
         group_by(Status, rs190962) %>%
         summarize(N=n())
 
-# Crie uma tabela de contingÍncia comparando a frequÍncia absoluta, relativa e se h· associaÁ„o entre o SNP rs190962 e Status
+# Crie uma tabela de conting√™ncia comparando a frequ√™ncia absoluta, relativa e se h√° associa√ß√£o entre o SNP rs190962 e Status
 tabela1 <- CreateTableOne(vars = "rs190962", strata = "Status", factorVars = "rs190962", data = sim_data)
 
-# Crie uma tabela de contingÍncia comparando a frequÍncia absoluta, relativa e se h· associaÁ„o entre os 10 primeiros SNPs e Status
-snps1.10 <- colnames(sim_data)[3:12] # terceiro ‡ dÈcimo segundo nome das colunas
+# Crie uma tabela de conting√™ncia comparando a frequ√™ncia absoluta, relativa e se h√° associa√ß√£o entre os 10 primeiros SNPs e Status
+snps1.10 <- colnames(sim_data)[3:12] # terceiro √† d√©cimo segundo nome das colunas
 tabela2 <- CreateTableOne(vars=snps1.10, strata = "Status", factorVars = snps1.10, data = sim_data)
 
-# Ajuste um modelo de regress„o logÌstica verificando associaÁ„o entre SNP rs190962 e Status
-# Regress„o logÌstica:
+# Ajuste um modelo de regress√£o log√≠stica verificando associa√ß√£o entre SNP rs190962 e Status
+# Regress√£o log√≠stica:
 modelo_rs190962 <- glm(Status ~ as.factor(rs190962), data = sim_data, family = binomial(link='logit'))
 # Resultados:
 summ(modelo_rs190962, confint = T, exp = T)
 
-# Crie um gr·fico mostrando os resultados da regress„o logÌstica em termos de odds ratio para o SNP rs123462
+# Crie um gr√°fico mostrando os resultados da regress√£o log√≠stica em termos de odds ratio para o SNP rs123462
 graficoOR_rs190962 <- plot_summs(modelo_rs190962, exp = T, scale = TRUE) +
-  xlab("Odds Ratio\nRef. rs190962 genÛtipo 0")
+  xlab("Odds Ratio\nRef. rs190962 gen√≥tipo 0")
 
-# Salve o gr·fico resultante no arquivo "RegLog_rs190962.pdf"
+# Salve o gr√°fico resultante no arquivo "RegLog_rs190962.pdf"
 pdf("RegLog_rs190962.pdf")
 graficoOR_rs190962
 dev.off()
 ```
 
 
-O resultado do ˙ltimo comando acima È um gr·fico, em PDF, com os valores de odds ratio para os genÛtipos 1 e 2 do SNP rs190962, em relaÁ„o ‡ categoria de referÍncia 0 deste SNP. Para observar o resultado, clique no arquivo `RegLog_rs190962.pdf` que apareceu na aba *Files*. Outra opÁ„o È selecionar este arquivo e clicar em *More > Export...*. Esta alternativa permite fazer o download de v·rios arquivos ao mesmo tempo em formato `.zip`.  
+O resultado do √∫ltimo comando acima √© um gr√°fico, em PDF, com os valores de odds ratio para os gen√≥tipos 1 e 2 do SNP rs190962, em rela√ß√£o √† categoria de refer√™ncia 0 deste SNP. Para observar o resultado, clique no arquivo `RegLog_rs190962.pdf` que apareceu na aba *Files*. Outra op√ß√£o √© selecionar este arquivo e clicar em *More > Export...*. Esta alternativa permite fazer o download de v√°rios arquivos ao mesmo tempo em formato `.zip`.  
 
-N„o esqueÁa de salvar o seu script, e se quiser fazer uma cÛpia em seu computador local, realizar o mesmo procedimento para exportar o script.
+N√£o esque√ßa de salvar o seu script, e se quiser fazer uma c√≥pia em seu computador local, realizar o mesmo procedimento para exportar o script.
 
-### Coment·rios finais
+### Coment√°rios finais
 
-Neste tutorial inicial, foi possÌvel realizar a conex„o de seu computador local ‡ inst‚ncia EC2 da Amazon destinada para este curso, onde o RStudio foi inicialmente instalado. TambÈm foi possÌvel explorar algumas funcionalidades b·sicas do RStudio em um banco de dados simulados de variantes genÈticas e um fenÛtipo do tipo caso-controle. Este mesmo banco de dados ser· utilizado para treinarmos e testarmos diferentes modelos de aprendizagem de m·quina.
+Neste tutorial inicial, foi poss√≠vel realizar a conex√£o de seu computador local √† inst√¢ncia EC2 da Amazon destinada para este curso, onde o RStudio foi inicialmente instalado. Tamb√©m foi poss√≠vel explorar algumas funcionalidades b√°sicas do RStudio em um banco de dados simulados de variantes gen√©ticas e um fen√≥tipo do tipo caso-controle. Este mesmo banco de dados ser√° utilizado para treinarmos e testarmos diferentes modelos de aprendizagem de m√°quina.
