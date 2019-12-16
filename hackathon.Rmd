@@ -11,24 +11,44 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### Abaixo seguem alguns comandos úteis para o pré-processamento de dados para a Hackathon
 
+
+
 ```{r, eval=F, echo=T}
-# Copiar os dados da Hackathon para o diretório de trabalho (R)
-file.copy(from = "/data/Dados_curso/", to = ".", recursive = T)
+# Carregar dados de expressão predita:
+
+exp_predita_amidala <- read.table(url("https://www.dropbox.com/s/ckb7hayv3517jmx/Amygdala_sem_imputacao_predicted_expression.txt?dl=1"), header=T)
+exp_predita_hipocampo <- read.table(url("https://www.dropbox.com/s/6chlfwx3sc93b29/Hippocampus_INPD_semimp_predicted_expression.txt?dl=1"), header=T)
 
 ```
+
+
+```{r, eval=F, echo=T}
+# Carregar dados de expressão gênica:
+
+# Não utilizar
+
+```
+
+
 
 ### É possível acessar o terminal Linux ao clinar na aba "Terminal", próximo ao console do RStudio.
 
 ### Genotipagem
 
+Para os dados de genotipagem, é necessário fazer o download dos arquivos de genotipagem no formato do software PLINK A pasta do Dropbox com os arquivos [pode ser encontrada neste link](https://www.dropbox.com/sh/r1dh3gambv6e5le/AAApxU9zDxzP6IKXP9OcsdXVa?dl=0). O software PLINK 1.9 já está disponível para todos os usuários no computador da Amazon. Os comandos para extrair todos ou um subset dos SNPs pode ser encontrado abaixo.
+
 ```{r, engine = 'bash', eval = FALSE}
+
+# Fazer download dos arquivos .bed, .bim e .fam neste link: 
+
+
 # Alguns comandos úteis para facilitar o processamento de dados de genotipagem (devem ser rodados na aba Terminal)
 
 # O comando abaixo recodifica todos os SNPs para o formato aditivo (número cópias de cada alelo: 0, 1 ou 2)
-plink --bfile BRFEP --recode A --out BRFED_additive
+plink2 --bfile INPD_QCed_curso --recode A --out INPD_QCed_curso_additive
 
 #Caso tenha interesse em filtrar para uma liste pré-selecionada the SNPs, criar esta lista (um SNP por linha), salvar como SNPs.txt e rodar:
-plink --bfile BRFEP --recode A --extract SNPs.txt --out BRFEP_additive_SNPs
+plink2 --bfile INPD_QCed_curso --recode A --extract SNPs.txt --out INPD_QCed_curso_additive_SNPs
 
 ```
 
