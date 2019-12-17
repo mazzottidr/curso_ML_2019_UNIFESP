@@ -75,5 +75,5 @@ neuroimagem <- read.csv(url("https://www.dropbox.com/s/0yyb55wgyq9ewv3/mydata_Vo
 #### Dados clínicos
 
 ```{r, eval=F, echo=T}
-clinicos <- read.table(url("https://www.dropbox.com/s/co2qy2lz95eya7e/Banco_INPD_curso.txt?dl=1"))
+clinicos <- read.csv(url("https://www.dropbox.com/s/co2qy2lz95eya7e/Banco_INPD_curso.txt?dl=1"))
 ```
