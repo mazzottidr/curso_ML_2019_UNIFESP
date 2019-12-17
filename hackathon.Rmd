@@ -9,64 +9,71 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+### A aula pode ser acessadas neste link: https://www.dropbox.com/s/plvnpitgjjbz9cl/MazzottiMachineLearning2019.pptx?dl=0
+
+
 ### Abaixo seguem alguns comandos úteis para o pré-processamento de dados para a Hackathon
 
+**Atenção!** Não faça o download de todos os arquivos! Apenas aqueles que irá utilizar para o seu projeto. Estes arquivos são relativamente grandes e pode ser que demore um tempo para que sejam transferidos.
 
+#### Dados de expressão predita - amígdala
 
 ```{r, eval=F, echo=T}
-# Carregar dados de expressão predita:
 
-exp_predita_amidala <- read.table(url("https://www.dropbox.com/s/ckb7hayv3517jmx/Amygdala_sem_imputacao_predicted_expression.txt?dl=1"), header=T)
-exp_predita_hipocampo <- read.table(url("https://www.dropbox.com/s/6chlfwx3sc93b29/Hippocampus_INPD_semimp_predicted_expression.txt?dl=1"), header=T)
+download.file("https://www.dropbox.com/s/ckb7hayv3517jmx/Amygdala_sem_imputacao_predicted_expression.txt?dl=1", destfile = "Amygdala_sem_imputacao_predicted_expression.txt")
+
+exp_predita_amigdala <- read.table("Amygdala_sem_imputacao_predicted_expression.txt", header=T)
 
 ```
 
+#### Dados de expressão predita - hipocampo
 
 ```{r, eval=F, echo=T}
-# Carregar dados de expressão gênica:
 
-# Não utilizar
+download.file("https://www.dropbox.com/s/6chlfwx3sc93b29/Hippocampus_INPD_semimp_predicted_expression.txt?dl=1", destfile = "Hippocampus_INPD_semimp_predicted_expression.txt")
 
+exp_predita_hipocampo <- read.table("Hippocampus_INPD_semimp_predicted_expression.txt", header=T)
 ```
 
 
+#### Dados de  genotipagem
 
-### É possível acessar o terminal Linux ao clinar na aba "Terminal", próximo ao console do RStudio.
+Para os dados de genotipagem, é necessário fazer o download dos arquivos de genotipagem no formato do software PLINK A pasta do Dropbox com os arquivos [pode ser encontrada neste link](https://www.dropbox.com/sh/r1dh3gambv6e5le/AAApxU9zDxzP6IKXP9OcsdXVa?dl=0). O software PLINK 1.9 já está disponível para todos os usuários no computador da Amazon. Os comandos para extrair todos ou um subset dos SNPs pode ser encontrado abaixo. Para usar o PLINK, é necessário acessar a aba "Terminal", próximo do Console. Você irá acessar o computador da Amazon e interagir usando um terminal do Linux.
 
-### Genotipagem
+É possível baixar a pasta completa no formato `.zip`, e transferir para a nuvem usando o botão **Upload**. Em seguida, é possível usar a função `unzip()` para dezipar os arquivos de genotipagem.
 
-Para os dados de genotipagem, é necessário fazer o download dos arquivos de genotipagem no formato do software PLINK A pasta do Dropbox com os arquivos [pode ser encontrada neste link](https://www.dropbox.com/sh/r1dh3gambv6e5le/AAApxU9zDxzP6IKXP9OcsdXVa?dl=0). O software PLINK 1.9 já está disponível para todos os usuários no computador da Amazon. Os comandos para extrair todos ou um subset dos SNPs pode ser encontrado abaixo.
+```{r, eval=F, echo=T}
+# No R, fazer o download to arquivo
+download.file("https://www.dropbox.com/s/bqru7yv82kjqh1k/genotipagem.zip?dl=1", destfile = "genotipagem.zip")
 
-```{r, engine = 'bash', eval = FALSE}
+# Dezipar
+unzip("genotipagem.zip")
 
-# Fazer download dos arquivos .bed, .bim e .fam neste link: 
+# Removar arquivo original
+file.remove("genotipagem.zip")
+```
 
+```{r, engine = 'bash', eval = FALSE, echo=T}
 
-# Alguns comandos úteis para facilitar o processamento de dados de genotipagem (devem ser rodados na aba Terminal)
+# No terminal, processar os arquivos
 
 # O comando abaixo recodifica todos os SNPs para o formato aditivo (número cópias de cada alelo: 0, 1 ou 2)
-plink2 --bfile INPD_QCed_curso --recode A --out INPD_QCed_curso_additive
+plink --bfile INPD_QCed_curso --recode A --out INPD_QCed_curso_additive
 
 #Caso tenha interesse em filtrar para uma liste pré-selecionada the SNPs, criar esta lista (um SNP por linha), salvar como SNPs.txt e rodar:
-plink2 --bfile INPD_QCed_curso --recode A --extract SNPs.txt --out INPD_QCed_curso_additive_SNPs
-
+plink --bfile INPD_QCed_curso --recode A --extract SNPs.txt --out INPD_QCed_curso_additive_SNPs
 ```
 
+Os resultados dos comandos anteriores gerarão novos arquivos em um formato que poderá ser importado pelo R para as análises de Machine Learning.
+
+#### Dados de neuroimagem
+
 ```{r, eval=F, echo=T}
-# É possível agora importar o arquivo "BRFED_additive.raw" no R, no mesmo formato que foi importado anteriormente nos tutoriais (rodar estes no R):
-# Atenção, evite carregar TODOS os SNPs (ocupa muita memóeria). O ídeal é rodar este comando apenas para SNPs filtrados:
-
-dados_SNPs <- read.table("BRFEP_additive_SNPs.raw", header = T)
-
+neuroimagem <- read.csv(url("https://www.dropbox.com/s/0yyb55wgyq9ewv3/mydata_Volumes_QC.csv?dl=1"), stringsAsFactors = F)
 ```
 
-### Expressão
+#### Dados clínicos
 
 ```{r, eval=F, echo=T}
-# Para carregar os dados de expressão, você pode usar o seguinte comando (no R):
-data <- read.table("FEP_Expressao_Clean.txt", header=T, sep="\t")
-
-# Será necessário transpor os dados (genes nas colunas, e indivíduos nas linhas). Use o comando abaixo para manter os nomes corretos das linhas e colunas:
-data_t = setNames(data.frame(t(data[,-1])), data[,1])
-
+clinicos <- read.csv(url("https://www.dropbox.com/s/pntmd2s20yswh4g/Banco_Curso_ML_171219.txt?dl=1"), sep="")
 ```

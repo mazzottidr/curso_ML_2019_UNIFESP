@@ -286,7 +286,7 @@ $(document).ready(function () {
   <a href="ml_naosupervisionado.html">Modelos não-supervisionados</a>
 </li>
 <li>
-  <a href="hackathon_wait.html">Dicas para Hackathon</a>
+  <a href="hackathon.html">Dicas para Hackathon</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -307,46 +307,54 @@ $(document).ready(function () {
 </div>
 
 
+<div id="a-aula-pode-ser-acessadas-neste-link-httpswww.dropbox.comsplvnpitgjjbz9clmazzottimachinelearning2019.pptxdl0" class="section level3">
+<h3>A aula pode ser acessadas neste link: <a href="https://www.dropbox.com/s/plvnpitgjjbz9cl/MazzottiMachineLearning2019.pptx?dl=0" class="uri">https://www.dropbox.com/s/plvnpitgjjbz9cl/MazzottiMachineLearning2019.pptx?dl=0</a></h3>
+</div>
 <div id="abaixo-seguem-alguns-comandos-uteis-para-o-pre-processamento-de-dados-para-a-hackathon" class="section level3">
 <h3>Abaixo seguem alguns comandos úteis para o pré-processamento de dados para a Hackathon</h3>
-<pre class="r"><code># Carregar dados de expressão predita:
+<p><strong>Atenção!</strong> Não faça o download de todos os arquivos! Apenas aqueles que irá utilizar para o seu projeto. Estes arquivos são relativamente grandes e pode ser que demore um tempo para que sejam transferidos.</p>
+<div id="dados-de-expressao-predita---amigdala" class="section level4">
+<h4>Dados de expressão predita - amígdala</h4>
+<pre class="r"><code>download.file(&quot;https://www.dropbox.com/s/ckb7hayv3517jmx/Amygdala_sem_imputacao_predicted_expression.txt?dl=1&quot;, destfile = &quot;Amygdala_sem_imputacao_predicted_expression.txt&quot;)
 
-exp_predita_amidala &lt;- read.table(url(&quot;https://www.dropbox.com/s/ckb7hayv3517jmx/Amygdala_sem_imputacao_predicted_expression.txt?dl=1&quot;), header=T)
-exp_predita_hipocampo &lt;- read.table(url(&quot;https://www.dropbox.com/s/6chlfwx3sc93b29/Hippocampus_INPD_semimp_predicted_expression.txt?dl=1&quot;), header=T)</code></pre>
-<pre class="r"><code># Carregar dados de expressão gênica:
+exp_predita_amigdala &lt;- read.table(&quot;Amygdala_sem_imputacao_predicted_expression.txt&quot;, header=T)</code></pre>
+</div>
+<div id="dados-de-expressao-predita---hipocampo" class="section level4">
+<h4>Dados de expressão predita - hipocampo</h4>
+<pre class="r"><code>download.file(&quot;https://www.dropbox.com/s/6chlfwx3sc93b29/Hippocampus_INPD_semimp_predicted_expression.txt?dl=1&quot;, destfile = &quot;Hippocampus_INPD_semimp_predicted_expression.txt&quot;)
 
-# Não utilizar</code></pre>
+exp_predita_hipocampo &lt;- read.table(&quot;Hippocampus_INPD_semimp_predicted_expression.txt&quot;, header=T)</code></pre>
 </div>
-<div id="e-possivel-acessar-o-terminal-linux-ao-clinar-na-aba-terminal-proximo-ao-console-do-rstudio." class="section level3">
-<h3>É possível acessar o terminal Linux ao clinar na aba “Terminal”, próximo ao console do RStudio.</h3>
-</div>
-<div id="genotipagem" class="section level3">
-<h3>Genotipagem</h3>
-<p>Para os dados de genotipagem, é necessário fazer o download dos arquivos de genotipagem no formato do software PLINK A pasta do Dropbox com os arquivos <a href="https://www.dropbox.com/sh/r1dh3gambv6e5le/AAApxU9zDxzP6IKXP9OcsdXVa?dl=0">pode ser encontrada neste link</a>. O software PLINK 1.9 já está disponível para todos os usuários no computador da Amazon. Os comandos para extrair todos ou um subset dos SNPs pode ser encontrado abaixo.</p>
+<div id="dados-de-genotipagem" class="section level4">
+<h4>Dados de genotipagem</h4>
+<p>Para os dados de genotipagem, é necessário fazer o download dos arquivos de genotipagem no formato do software PLINK A pasta do Dropbox com os arquivos <a href="https://www.dropbox.com/sh/r1dh3gambv6e5le/AAApxU9zDxzP6IKXP9OcsdXVa?dl=0">pode ser encontrada neste link</a>. O software PLINK 1.9 já está disponível para todos os usuários no computador da Amazon. Os comandos para extrair todos ou um subset dos SNPs pode ser encontrado abaixo. Para usar o PLINK, é necessário acessar a aba “Terminal”, próximo do Console. Você irá acessar o computador da Amazon e interagir usando um terminal do Linux.</p>
+<p>É possível baixar a pasta completa no formato <code>.zip</code>, e transferir para a nuvem usando o botão <strong>Upload</strong>. Em seguida, é possível usar a função <code>unzip()</code> para dezipar os arquivos de genotipagem.</p>
+<pre class="r"><code># No R, fazer o download to arquivo
+download.file(&quot;https://www.dropbox.com/s/bqru7yv82kjqh1k/genotipagem.zip?dl=1&quot;, destfile = &quot;genotipagem.zip&quot;)
+
+# Dezipar
+unzip(&quot;genotipagem.zip&quot;)
+
+# Removar arquivo original
+file.remove(&quot;genotipagem.zip&quot;)</code></pre>
 <pre class="bash"><code>
-# Fazer download dos arquivos .bed, .bim e .fam neste link: 
-
-
-# Alguns comandos úteis para facilitar o processamento de dados de genotipagem (devem ser rodados na aba Terminal)
+# No terminal, processar os arquivos
 
 # O comando abaixo recodifica todos os SNPs para o formato aditivo (número cópias de cada alelo: 0, 1 ou 2)
-plink2 --bfile INPD_QCed_curso --recode A --out INPD_QCed_curso_additive
+plink --bfile INPD_QCed_curso --recode A --out INPD_QCed_curso_additive
 
 #Caso tenha interesse em filtrar para uma liste pré-selecionada the SNPs, criar esta lista (um SNP por linha), salvar como SNPs.txt e rodar:
-plink2 --bfile INPD_QCed_curso --recode A --extract SNPs.txt --out INPD_QCed_curso_additive_SNPs
-</code></pre>
-<pre class="r"><code># É possível agora importar o arquivo &quot;BRFED_additive.raw&quot; no R, no mesmo formato que foi importado anteriormente nos tutoriais (rodar estes no R):
-# Atenção, evite carregar TODOS os SNPs (ocupa muita memóeria). O ídeal é rodar este comando apenas para SNPs filtrados:
-
-dados_SNPs &lt;- read.table(&quot;BRFEP_additive_SNPs.raw&quot;, header = T)</code></pre>
+plink --bfile INPD_QCed_curso --recode A --extract SNPs.txt --out INPD_QCed_curso_additive_SNPs</code></pre>
+<p>Os resultados dos comandos anteriores gerarão novos arquivos em um formato que poderá ser importado pelo R para as análises de Machine Learning.</p>
 </div>
-<div id="expressao" class="section level3">
-<h3>Expressão</h3>
-<pre class="r"><code># Para carregar os dados de expressão, você pode usar o seguinte comando (no R):
-data &lt;- read.table(&quot;FEP_Expressao_Clean.txt&quot;, header=T, sep=&quot;\t&quot;)
-
-# Será necessário transpor os dados (genes nas colunas, e indivíduos nas linhas). Use o comando abaixo para manter os nomes corretos das linhas e colunas:
-data_t = setNames(data.frame(t(data[,-1])), data[,1])</code></pre>
+<div id="dados-de-neuroimagem" class="section level4">
+<h4>Dados de neuroimagem</h4>
+<pre class="r"><code>neuroimagem &lt;- read.csv(url(&quot;https://www.dropbox.com/s/0yyb55wgyq9ewv3/mydata_Volumes_QC.csv?dl=1&quot;), stringsAsFactors = F)</code></pre>
+</div>
+<div id="dados-clinicos" class="section level4">
+<h4>Dados clínicos</h4>
+<pre class="r"><code>clinicos &lt;- read.csv(url(&quot;https://www.dropbox.com/s/pntmd2s20yswh4g/Banco_Curso_ML_171219.txt?dl=1&quot;), sep=&quot;&quot;)</code></pre>
+</div>
 </div>
 
 <p>Copyright &copy; 2019 Diego R. Mazzotti, Ph.D. Todos os direitos reservados.</p>
